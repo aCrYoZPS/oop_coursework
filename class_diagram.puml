@@ -90,4 +90,116 @@ package Domain {
     Reaction *-- ReactionType
 }
 
+package Repository {
+    interface IRepository<T>{
+        + GetAllAsync()
+        + GetByIdAsync()
+        + AddAsync()
+        + UpdateAsync()
+        + DeleteAsync()
+    }
+    
+    interface IUserRepository{
+        + GetByEmailAsync()
+    }
+    
+    interface IPostReactionRepository {
+        + GetLikedPostsAsync()
+    }
+    
+    class Repository<T>{
+        - context
+        - entities
+        + Repository()
+        + GetAllAsync()
+        + GetByIdAsync()
+        + AddAsync()
+        + UpdateAsync()
+        + DeleteAsync()
+    }
+    
+    class UserRepository{
+        + UserRepository()
+        + GetByEmailAsync()
+    }
+    
+    class PostReactionRepository {
+        + PostReactionRepository()
+        + GetLikedPostsAsync()
+    }
+    
+    IRepository <|-- IPostReactionRepository
+    IRepository <|-- IUserRepository
+    IRepository <|-- Repository
+    
+    Repository <|-- UserRepository
+    Repository <|-- PostReactionRepository
+    
+    IUserRepository <|-- UserRepository
+    User <--IUserRepository : "depends on"
+    
+    IPostReactionRepository <|-- PostReactionRepository
+    PostReaction <-- IPostReactionRepository : "depends on"
+}
+
+package Controllers{
+    class UserController{
+        - repository
+        + Register()
+        + Login()
+        + GetUser()
+        + UpdateUser()
+        + DeleteUser()
+        - VerifyPasswordHash()
+    }
+    
+     class CommentController{
+        - commentRepository
+        - commentReactionRepository
+        + GetCommentById()
+        + CreateComment()
+        + UpdateComment()
+        + DeleteComment()
+        + ReactToComment()
+        + DeleteReactionToComment()
+    }
+    
+    class PostController {
+        - communityRepository
+        - postRepository
+        - postReactionRepository
+        + GetPostById()
+        + CreatePost()
+        + UpdatePost()
+        + DeletePost()
+        + ReactToPost()
+        + DeleteReactionToPost()
+    }
+    
+    class CommunityController {
+        - communityRepository
+        - moderatorRepository
+        - userRepository
+        + GetCommuntityById()
+        + CreateCommunity()
+        + UpdateCommunity()
+        + DeleteCommunity()
+        + Subscribe()
+        + Unsubscribe()
+        + AddModerator()
+        + RemoveModerator()
+        + GetModerators()
+        + GetCreator()
+    }
+    
+    IPostReactionRepository o-- PostController
+    
+    IUserRepository o-- UserController
+    IUserRepository o-- CommunityController
+    
+    IRepository o-- CommentController
+    IRepository o-- PostController
+    IRepository o-- CommunityController
+}
+
 @enduml
