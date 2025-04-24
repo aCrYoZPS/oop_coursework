@@ -1,0 +1,93 @@
+@startuml
+
+package Domain {
+    class User{
+        + Id
+        + Username
+        + Email
+        + PasswordHash
+        + RegistrationDate
+        + Karma
+    }
+    
+    class Comment{
+        + Id
+        + PostId
+        + AuthorId
+        + Content
+        + Reaction
+        + ParrentCommentId
+    }
+    
+    class Post{
+        + Id
+        + Title
+        + ImageUrl
+        + Content
+        + Reaction
+        + CommunityId
+        + AuthorId
+        + CreationDate
+        + LastEditDate
+    }
+    
+    class Community {
+        + Name
+        + Description
+        + CreatorId
+        + CreationDate
+    }
+    
+    class Reaction {
+        + Id
+        + ReactionType
+        + AuthorId
+    }
+    
+    class PostReaction {
+        + PostId
+    }
+    
+    class CommentReaction {
+        + CommentId
+    }
+    
+    enum ReactionType{
+        Like
+        Dislike
+    }
+    
+    class Subscription {
+        + Id
+        + UserId
+        + CommunityId
+        + SubscriptionDate
+    }
+    
+    class Moderator {
+        + Id
+        + UserId
+        + CommunityId
+        + GrantedDate
+    }
+    
+    'Relations'
+    Community *-- Post
+    Community *-- Subscription
+    Community *-- Moderator
+    
+    User *-- Subscription
+    User *-- Moderator
+    
+    Post *-- Comment
+    Post *-- PostReaction
+    
+    Comment *-- CommentReaction
+    Comment --> Comment
+    
+    Reaction <|-- CommentReaction
+    Reaction <|-- PostReaction
+    Reaction *-- ReactionType
+}
+
+@enduml
