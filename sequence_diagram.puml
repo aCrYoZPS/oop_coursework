@@ -1,0 +1,61 @@
+@startuml seq
+
+actor User 
+box "SERVICES" #baf5ca
+participant Frontend
+participant Backend
+participant DB
+User->Frontend++: Залогиниться в систему/Зарегистрироваться
+Frontend->Backend++: POST /sign-up/ или POST /register/ 
+Backend->DB++: Запросить пользователя по паролю и email
+DB->Backend--:Вернуть пользователя по паролю и email
+Backend->Frontend--:Вернуть JWT
+Frontend->User--:Сохранить локально JWT
+
+User->Frontend++: Просмотреть посты какого-либо сообщества
+Frontend->Backend++:GET /api/community/{communityId}
+Backend->DB++:Запросить список всех постов сообщества в хронологическом порядке
+DB->Backend--: Получить список всех постов сообщества в хрон. порядке
+Backend->Frontend--: Вернуть список постов
+Frontend->User--: Вернуть список постов
+
+User->Frontend++: Создать пост в каком-либо сообществе
+Frontend->Backend++:POST /api/community/{communityId}
+Backend->DB++: Запросить создание поста
+DB->Backend--: Проверить выполнение запроса
+Backend->Frontend--: Вернуть статус создания (успех, неудача)
+Frontend->User--: Вернуть статус создания (успех, неудача)
+
+User->Frontend++: Отредактировать пост в каком-либо сообществе
+Frontend->Backend++:PUT /api/community/{communityId}/{post_id}
+Backend->DB++: Запросить редактирование поста
+DB->Backend--: Проверить выполнение запроса
+Backend->Frontend--: Вернуть статус редактирования (успех, неудача)
+Frontend->User--: Вернуть статус редактирования (успех, неудача)
+
+User->Frontend++: Удалить пост в каком-либо сообществе
+Frontend->Backend++:DELETE /api/community/{communityId}/{post_id}
+Backend->DB++: Запросить удаления поста
+DB->Backend--: Проверить выполнение запроса
+Backend->Frontend--: Вернуть статус удаления (успех, неудача)
+Frontend->User--: Вернуть статус удаления (успех, неудача)
+
+User->Frontend++: Лайкнуть/дизлайкнуть пост в каком-либо сообществе
+Frontend->Backend++:POST /api/community/{communityId}/{post_id}/reaction
+Backend->DB++: Запросить создание реакции
+DB->Backend--: Проверить выполнение запроса
+Backend->DB++: Запросить актуальное количество реакций
+DB->Backend--: Вернуть актуальное количество реакций
+Backend->Frontend--: Обновить количество реакций с учетом реакции пользователя
+Frontend->User--: Показать обновлённое значение
+
+User->Frontend++: Убрать реакцию с поста в каком-либо сообществе
+Frontend->Backend++:DELETE /api/community/{communityId}/{post_id}/reaction
+Backend->DB++: Запросить реакцию данного пользователя на данный пост
+DB->Backend--: Получить id реакции
+Backend->DB++: Запросить удаление реакции с найденным id
+DB->Backend--: Проверить выполнение запроса
+Backend->DB++: Запросить актуальное количество реакций
+DB->Backend--: Вернуть актуальное количество реакций
+Backend->Frontend--: Обновить количество реакций с учетом реакции пользователя
+Frontend->User--: Показать обновлённое значение

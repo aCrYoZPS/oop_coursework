@@ -10,6 +10,12 @@ package Domain {
         + Karma
     }
     
+    class PostNotification{
+        +Id
+        +PostId
+        +UserId
+    }
+    
     class Comment{
         + Id
         + PostId
@@ -24,7 +30,6 @@ package Domain {
         + Title
         + ImageUrl
         + Content
-        + Reaction
         + CommunityId
         + AuthorId
         + CreationDate
@@ -62,6 +67,7 @@ package Domain {
         + UserId
         + CommunityId
         + SubscriptionDate
+        + EnableNotifications
     }
     
     class Moderator {
@@ -200,6 +206,21 @@ package Controllers{
     IRepository o-- CommentController
     IRepository o-- PostController
     IRepository o-- CommunityController
+}
+
+package Services{
+    class NotificationService{
+        - notificationRepository
+        + SendPendingNotifications()
+    }
+    
+    class PostModerationService{
+        - postRepository
+        + CheckPost()
+    }
+    
+    IRepository o-- NotificationService
+    IRepository o-- PostModerationService
 }
 
 @enduml

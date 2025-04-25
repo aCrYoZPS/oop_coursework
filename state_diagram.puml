@@ -1,0 +1,10 @@
+@startuml state project
+[*] --> Draft : создан
+Draft: пост создан и готов к публикации
+Draft --> Checked: проверен
+Checked --> Removed: не прошел проверку
+Checked --> Published: опубликован
+
+Published --> Archived : заархивирован системой
+
+@enduml

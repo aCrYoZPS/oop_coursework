@@ -1,0 +1,45 @@
+@startuml usecases
+skinparam usecase {
+  DefaultFontName Fira Mono
+}
+actor User
+actor Admin
+actor Moderator
+left to right direction
+
+User-->(Sign in / Sign Up)
+User-->(Interact with community)
+(Interact with community)-->(Create community):<Includes>
+(Interact with community)-->(Edit community):<Includes>
+(Interact with community)-->(Get community info):<Includes>
+(Interact with community)-->(Un/Subscribe to community):<Includes>
+
+
+(Interact with community)-->(Interact with post)
+(Interact with post)-->(Create post):<Includes>
+(Get post)<..(Approve posts):<Extends for moderator/admin>
+(Interact with post)-->(Update post):<Includes>
+(Interact with post)-->(Delete post):<Includes>
+(Interact with post)-->(Get post):<Includes>
+(Interact with post)-->(React to post):<Includes>
+
+(Interact with post)-->(Interact with comment)
+(Interact with comment)-->(Create comment):<Includes>
+(Interact with comment)-->(Update comment):<Includes>
+(Interact with comment)-->(Delete comment):<Includes>
+(Interact with comment)-->(Get comment):<Includes>
+(Interact with comment)-->(React to comment):<Includes>
+
+User<|--Moderator
+User<|--Admin
+Moderator<|--Admin
+Moderator-->(Interact with community as mod/admin)
+(Interact with community as mod/admin)-->(Grant/Revoke moderator):<Includes>
+(Interact with community as mod/admin)-->(Ban/Unban users):<Includes>
+(Interact with community as mod/admin)-->(Delete any post):<Includes>
+
+Admin-->(Interact with community as admin)
+(Interact with community as admin)-->(Delete community):<Includes>
+
+
+
