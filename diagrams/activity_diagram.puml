@@ -1,0 +1,25 @@
+@startuml
+header activity diagrams
+title Posting Activity
+
+start
+:Create post title;
+:Create post content (text);
+:Attach image to post (optional);
+:Add post to db;
+
+if (checked and found proper?) then (yes)
+    while (check unnotified subscribers) is (not empty)
+        if (opted for notifications?) then (yes)
+            :Add notification to db;
+        else (no)
+        endif
+    endwhile
+    stop
+else (no)
+    :Post rejected;
+    :Delete post from db;
+    stop
+endif
+
+@enduml
