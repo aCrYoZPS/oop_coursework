@@ -1,6 +1,0 @@
-@WonderlustAPI_HostAddress = http://localhost:5194
-
-GET {{WonderlustAPI_HostAddress}}/
-Accept: application/json
-
-###
