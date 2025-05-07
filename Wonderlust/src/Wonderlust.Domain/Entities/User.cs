@@ -18,13 +18,11 @@ public class User
 
     public virtual ICollection<Moderator> ModeratedCommunities { get; private set; } = new List<Moderator>();
 
-    private User()
-    {
-    }
+    private User() { }
 
-    public User(Guid id, string username, string passwordHash, string email)
+    public User(string username, string passwordHash, string email)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         if (string.IsNullOrWhiteSpace(username))
         {
             throw new ArgumentException("Username cannot be empty.", nameof(username));
