@@ -1,14 +1,14 @@
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Wonderlust.Domain.Entities;
 
-class Community
+public class Community
 {
     public Guid Id { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public DateTimeOffset CreationDate { get; private set; }
 
-    [ForeignKey("User")]
     public Guid CreatorId { get; private set; }
     public User Creator { get; private set; }
 

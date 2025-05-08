@@ -19,5 +19,4 @@ public class Moderator
         UserId = userId;
         CommunityId = communityId;
     }
-
 }
