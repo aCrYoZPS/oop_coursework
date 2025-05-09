@@ -3,6 +3,7 @@ namespace Wonderlust.Domain.Entities;
 public class Subscription
 {
     public Guid Id { get; private set; }
+
     public DateTimeOffset SubscriptionDate { get; private set; }
     public bool EnableNotifications { get; private set; } = true;
 

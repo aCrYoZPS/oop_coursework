@@ -3,6 +3,7 @@
 public class Post
 {
     public Guid Id { get; private set; }
+
     public string Title { get; private set; }
     public string? ImageId { get; private set; }
     public string? Content { get; private set; }
@@ -35,5 +36,15 @@ public class Post
 
         CommunityId = communityId;
         AuthorId = authorId;
+    }
+
+    public void UpdateLastUpdateDate(DateTimeOffset lastUpdateDate)
+    {
+        if (lastUpdateDate < CreationDate)
+        {
+            throw new ArgumentException("Update date cannot be earlier than creation date", nameof(lastUpdateDate));
+        }
+
+        LastUpdateDate = lastUpdateDate;
     }
 }

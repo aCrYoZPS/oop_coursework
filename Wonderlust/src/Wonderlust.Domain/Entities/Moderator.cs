@@ -3,6 +3,7 @@ namespace Wonderlust.Domain.Entities;
 public class Moderator
 {
     public Guid Id { get; private set; }
+
     public DateTimeOffset GrantedDate { get; private set; } = DateTimeOffset.UtcNow;
 
     public Guid UserId { get; private set; }

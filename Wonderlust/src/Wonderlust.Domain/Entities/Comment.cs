@@ -3,6 +3,7 @@
 public class Comment
 {
     public Guid Id { get; private set; }
+
     public string Content { get; private set; }
     public DateTimeOffset CreationDate { get; private set; }
     public DateTimeOffset LastUpdateDate { get; private set; }
@@ -15,6 +16,8 @@ public class Comment
 
     public Guid ParentCommentId { get; private set; }
     public Comment ParentComment { get; private set; }
+
+    public ICollection<CommentReaction> Reactions { get; private set; } = new List<CommentReaction>();
 
     private Comment() { }
 

@@ -10,6 +10,7 @@ public static class MongoServiceExtensions
 {
     public static IServiceCollection AddMongoDb(this IServiceCollection services, IConfiguration configuration)
     {
+        MongoConfigurator.Configure();
         services.Configure<MongoDbSettings>(options =>
         {
             options.ConnectionString = configuration.GetSection("MongoDbSettings")
