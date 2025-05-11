@@ -1,14 +1,42 @@
-using MongoDB.Bson;
-using MongoDB.Driver;
-using Wonderlust.Domain.Entities;
+using System.Text.Json;
 using Wonderlust.Infrastructure.Extensions;
+using Wonderlust.Infrastructure.Repositories;
+using Scrutor;
+using Wonderlust.API.Mappings;
+using Wonderlust.Application.Features.Users.Commands.CreateUser;
+using Wonderlust.Domain.Entities;
+using Wonderlust.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(CreateUserCommandHandler).Assembly)
+);
+
+builder.Services.AddAutoMapper(
+    [typeof(CreateUserCommandHandler).Assembly, typeof(UserMappingProfile).Assembly]
+);
+
 builder.Services.AddOpenApi();
 builder.Services.AddMongoDb(builder.Configuration);
+
+builder.Services.Scan(scan =>
+    scan.FromAssemblyOf<MongoUserRepository>()
+        .AddClasses(classes => classes
+            .Where(t => t.Name.StartsWith("Mongo") &&
+                        t.Name.EndsWith("Repository")
+            )
+        )
+        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+        .AsImplementedInterfaces()
+        .WithScopedLifetime()
+);
 
 var app = builder.Build();
 
@@ -18,18 +46,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.MapGet("/", async (IMongoDatabase db) => // получаем IMongoDatabase - базу данных "test" через DI
-{
-    var collection = db.GetCollection<Comment>("comments"); // получаем коллекцию users
-    if (await collection.CountDocumentsAsync("{}") == 0)
-    {
-        await collection.InsertOneAsync(new Comment("ABCD", Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()));
-    }
-
-    var users = await collection.Find("{}").ToListAsync();
-    return users.ToJson(); // отправляем клиенту все документы из коллекции
-});
 app.Run();

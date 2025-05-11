@@ -15,7 +15,7 @@ public class User
 
     private User() { }
 
-    public User(string username, string passwordHash, string email)
+    public User(string username, string password, string email)
     {
         Id = Guid.NewGuid();
         if (string.IsNullOrWhiteSpace(username))
@@ -23,9 +23,9 @@ public class User
             throw new ArgumentException("Username cannot be empty.", nameof(username));
         }
 
-        if (string.IsNullOrWhiteSpace(passwordHash))
+        if (string.IsNullOrWhiteSpace(password))
         {
-            throw new ArgumentException("Password hash cannot be empty.", nameof(passwordHash));
+            throw new ArgumentException("Password cannot be empty.", nameof(password));
         }
 
         if (!Utils.IsValidEmail(email))
@@ -34,8 +34,8 @@ public class User
         }
 
         Username = username;
-        PasswordHash = passwordHash;
-        Email = email;
+        PasswordHash = password;
+        Email = email.ToLower();
         RegistrationDate = DateTimeOffset.UtcNow;
     }
 
@@ -61,6 +61,6 @@ public class User
             throw new ArgumentException($"New email {newEmail} is invalid.", nameof(newEmail));
         }
 
-        Email = newEmail;
+        Email = newEmail.ToLower();
     }
 }

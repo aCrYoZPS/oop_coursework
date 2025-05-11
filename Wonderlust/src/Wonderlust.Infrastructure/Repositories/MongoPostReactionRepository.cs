@@ -2,7 +2,7 @@
 using Wonderlust.Domain.Entities;
 using Wonderlust.Domain.Repositories;
 
-namespace Wonderlust.Infrastructure.Repositoriesr;
+namespace Wonderlust.Infrastructure.Repositories;
 
 public class MongoPostReactionRepository(IMongoDatabase database) : IPostReactionRepository
 {

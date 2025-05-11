@@ -7,10 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3"/>
+        <PackageReference Include="Scrutor" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Wonderlust.Application\Wonderlust.Application.csproj" />
       <ProjectReference Include="..\Wonderlust.Infrastructure\Wonderlust.Infrastructure.csproj" />
     </ItemGroup>
 

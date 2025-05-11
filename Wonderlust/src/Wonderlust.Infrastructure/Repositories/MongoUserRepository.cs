@@ -4,9 +4,15 @@ using Wonderlust.Domain.Repositories;
 
 namespace Wonderlust.Infrastructure.Repositories;
 
-public class MongoUserRepository(IMongoDatabase database) : IUserRepository
+public class MongoUserRepository : IUserRepository
 {
-    private IMongoCollection<User> collection = database.GetCollection<User>("Users");
+    private readonly IMongoCollection<User> collection;
+
+    public MongoUserRepository(IMongoDatabase database)
+    {
+        collection = database.GetCollection<User>("Users");
+        ConfigureIndexes(collection);
+    }
 
     public async Task<IEnumerable<User>> GetAllAsync()
     {
@@ -25,7 +31,14 @@ public class MongoUserRepository(IMongoDatabase database) : IUserRepository
 
     public async Task AddAsync(User user)
     {
-        await collection.InsertOneAsync(user);
+        try
+        {
+            await collection.InsertOneAsync(user);
+        }
+        catch (MongoWriteException ex)
+        {
+            throw new Exception($"Failed to add new user with exception: {ex}");
+        }
     }
 
     public async Task UpdateAsync(User user)
@@ -36,5 +49,20 @@ public class MongoUserRepository(IMongoDatabase database) : IUserRepository
     public async Task DeleteAsync(Guid id)
     {
         await collection.DeleteOneAsync(u => u.Id == id);
+    }
+
+    private static void ConfigureIndexes(IMongoCollection<User> collection)
+    {
+        var indexKeys = Builders<User>.IndexKeys.Ascending(u => u.Email);
+
+        var indexOptions = new CreateIndexOptions
+        {
+            Unique = true,
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        collection.Indexes.CreateOne(
+            new CreateIndexModel<User>(indexKeys, indexOptions)
+        );
     }
 }
