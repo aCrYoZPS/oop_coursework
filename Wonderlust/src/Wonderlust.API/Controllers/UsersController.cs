@@ -16,8 +16,15 @@ public class UsersController(IMediator mediator, IMapper mapper) : ControllerBas
         [FromBody] CreateUserRequest request)
     {
         var command = mapper.Map<CreateUserCommand>(request);
-        var result = await mediator.Send(command);
-        return CreatedAtAction(nameof(GetUser), new { id = result.Id }, result);
+        try
+        {
+            var result = await mediator.Send(command);
+            return CreatedAtAction(nameof(GetUser), new { id = result.Id }, result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id:guid}")]
