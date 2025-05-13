@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Wonderlust.Application.Exceptions;
 using Wonderlust.Application.Features.Users.Dtos;
 using Wonderlust.Domain.Repositories;
 
@@ -14,7 +15,7 @@ public class GetUserQueryHandler(IUserRepository repository, IMapper mapper)
 
         if (user == null)
         {
-            throw new Exception($"User with id {request.UserId} does not exist");
+            throw new NotFoundException($"User with id {request.UserId} not found");
         }
 
         return mapper.Map<UserDto>(user);

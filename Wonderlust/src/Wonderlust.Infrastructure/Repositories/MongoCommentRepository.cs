@@ -18,7 +18,7 @@ public class MongoCommentRepository(IMongoDatabase database) : ICommentRepositor
         return await collection.Find(c => c.PostId == postId).ToListAsync();
     }
 
-    public async Task<Comment> GetByIdAsync(Guid id)
+    public async Task<Comment?> GetByIdAsync(Guid id)
     {
         return await collection.Find(c => c.Id == id).FirstOrDefaultAsync();
     }

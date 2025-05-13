@@ -19,12 +19,12 @@ public class MongoUserRepository : IUserRepository
         return await collection.Find("{}").ToListAsync();
     }
 
-    public async Task<User> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id)
     {
         return await collection.Find(u => u.Id == id).FirstOrDefaultAsync();
     }
 
-    public async Task<User> GetByEmailAsync(string email)
+    public async Task<User?> GetByEmailAsync(string email)
     {
         return await collection.Find(u => u.Email == email).FirstOrDefaultAsync();
     }

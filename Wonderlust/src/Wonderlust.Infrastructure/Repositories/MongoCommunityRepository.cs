@@ -6,14 +6,14 @@ namespace Wonderlust.Infrastructure.Repositories;
 
 public class MongoCommunityRepository(IMongoDatabase database) : ICommunityRepository
 {
-    private IMongoCollection<Community> collection = database.GetCollection<Community>("Communities");
+    private readonly IMongoCollection<Community> collection = database.GetCollection<Community>("Communities");
 
     public async Task<IEnumerable<Community>> GetAllAsync()
     {
         return await collection.Find("{}").ToListAsync();
     }
 
-    public async Task<Community> GetByIdAsync(Guid id)
+    public async Task<Community?> GetByIdAsync(Guid id)
     {
         return await collection.Find(c => c.Id == id).FirstOrDefaultAsync();
     }

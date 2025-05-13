@@ -6,7 +6,7 @@ namespace Wonderlust.Infrastructure.Repositories;
 
 public class MongoPostReactionRepository(IMongoDatabase database) : IPostReactionRepository
 {
-    private IMongoCollection<PostReaction> collection = database.GetCollection<PostReaction>("PostReactions");
+    private readonly IMongoCollection<PostReaction> collection = database.GetCollection<PostReaction>("PostReactions");
 
     public async Task<IEnumerable<PostReaction>> GetAllAsync()
     {
@@ -18,7 +18,7 @@ public class MongoPostReactionRepository(IMongoDatabase database) : IPostReactio
         return await collection.Find(pr => pr.PostId == postId).ToListAsync();
     }
 
-    public async Task<PostReaction> GetByIdAsync(Guid id)
+    public async Task<PostReaction?> GetByIdAsync(Guid id)
     {
         return await collection.Find(pr => pr.Id == id).FirstOrDefaultAsync();
     }

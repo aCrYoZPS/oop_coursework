@@ -19,7 +19,7 @@ public class MongoCommentNotificationRepository(IMongoDatabase database) : IComm
         return await collection.Find(cn => cn.UserId == id).ToListAsync();
     }
 
-    public async Task<CommentNotification> GetByIdAsync(Guid id)
+    public async Task<CommentNotification?> GetByIdAsync(Guid id)
     {
         return await collection.Find(cn => cn.Id == id).FirstOrDefaultAsync();
     }

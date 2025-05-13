@@ -54,5 +54,6 @@ TestResult.xml
 nunit-*.xml
 
 .idea/
+.vs/
 *.user
 qodana.yaml

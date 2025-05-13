@@ -19,7 +19,7 @@ public class MongoCommentReactionRepository(IMongoDatabase database) : ICommentR
         return await collection.Find(cr => cr.CommentId == commentId).ToListAsync();
     }
 
-    public async Task<CommentReaction> GetByIdAsync(Guid id)
+    public async Task<CommentReaction?> GetByIdAsync(Guid id)
     {
         return await collection.Find(cr => cr.Id == id).FirstOrDefaultAsync();
     }

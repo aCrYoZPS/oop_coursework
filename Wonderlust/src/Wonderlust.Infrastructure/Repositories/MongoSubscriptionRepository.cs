@@ -6,7 +6,7 @@ namespace Wonderlust.Infrastructure.Repositories;
 
 public class MongoSubscriptionRepository(IMongoDatabase database) : ISubscriptionRepository
 {
-    private IMongoCollection<Subscription> collection = database.GetCollection<Subscription>("Subscriptions");
+    private readonly IMongoCollection<Subscription> collection = database.GetCollection<Subscription>("Subscriptions");
 
     public async Task<IEnumerable<Subscription>> GetAllAsync()
     {
@@ -23,7 +23,7 @@ public class MongoSubscriptionRepository(IMongoDatabase database) : ISubscriptio
         return await collection.Find(s => s.CommunityId == communityId).ToListAsync();
     }
 
-    public async Task<Subscription> GetByIdAsync(Guid id)
+    public async Task<Subscription?> GetByIdAsync(Guid id)
     {
         return await collection.Find(s => s.Id == id).FirstOrDefaultAsync();
     }

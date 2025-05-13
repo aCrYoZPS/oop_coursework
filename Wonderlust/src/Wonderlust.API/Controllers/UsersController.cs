@@ -2,7 +2,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Wonderlust.API.Requests.Users;
+using Wonderlust.Application.Exceptions;
 using Wonderlust.Application.Features.Users.Commands.CreateUser;
+using Wonderlust.Application.Features.Users.Commands.DeleteUser;
+using Wonderlust.Application.Features.Users.Dtos;
 using Wonderlust.Application.Features.Users.Queries.GetUser;
 
 namespace Wonderlust.API.Controllers;
@@ -31,8 +34,24 @@ public class UsersController(IMediator mediator, IMapper mapper) : ControllerBas
     public async Task<IActionResult> GetUser(Guid id)
     {
         var query = new GetUserQuery(id);
-        var result = await mediator.Send(query);
+        UserDto result;
+        try
+        {
+            result = await mediator.Send(query);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
 
-        return result != null ? Ok(result) : NotFound();
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        var command = new DeleteUserCommand(id);
+        await mediator.Send(command);
+        return NoContent();
     }
 }

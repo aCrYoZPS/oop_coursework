@@ -6,7 +6,7 @@ namespace Wonderlust.Infrastructure.Repositories;
 
 public class MongoModeratorRepository(IMongoDatabase database) : IModeratorRepository
 {
-    private IMongoCollection<Moderator> collection = database.GetCollection<Moderator>("Moderators");
+    private readonly IMongoCollection<Moderator> collection = database.GetCollection<Moderator>("Moderators");
 
     public async Task<IEnumerable<Moderator>> GetAllAsync()
     {
@@ -18,7 +18,7 @@ public class MongoModeratorRepository(IMongoDatabase database) : IModeratorRepos
         return await collection.Find(m => m.CommunityId == communityId).ToListAsync();
     }
 
-    public async Task<Moderator> GetByIdAsync(Guid id)
+    public async Task<Moderator?> GetByIdAsync(Guid id)
     {
         return await collection.Find(m => m.Id == id).FirstOrDefaultAsync();
     }

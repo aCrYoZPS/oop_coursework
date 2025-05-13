@@ -6,7 +6,7 @@ namespace Wonderlust.Infrastructure.Repositories;
 
 public class MongoPostNotificationRepository(IMongoDatabase database) : IPostNotificationRepository
 {
-    private IMongoCollection<PostNotification> collection =
+    private readonly IMongoCollection<PostNotification> collection =
         database.GetCollection<PostNotification>("PostNotifications");
 
     public async Task<IEnumerable<PostNotification>> GetAllAsync()
@@ -19,7 +19,7 @@ public class MongoPostNotificationRepository(IMongoDatabase database) : IPostNot
         return await collection.Find(pn => pn.UserId == userId).ToListAsync();
     }
 
-    public async Task<PostNotification> GetByIdAsync(Guid id)
+    public async Task<PostNotification?> GetByIdAsync(Guid id)
     {
         return await collection.Find(pn => pn.Id == id).FirstOrDefaultAsync();
     }
