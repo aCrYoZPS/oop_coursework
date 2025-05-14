@@ -1,0 +1,17 @@
+﻿using AutoMapper;
+using Wonderlust.Application.Features.Communities.Commands.CreateCommunity;
+using Wonderlust.Application.Features.Communities.Dtos;
+using Wonderlust.Domain.Entities;
+
+namespace Wonderlust.API.Mappings;
+
+public class CommunityMappingProfile : Profile
+{
+    public CommunityMappingProfile()
+    {
+        // CreateMap<CreateCommunityRequest, CreateCommunityCommand>();
+        CreateMap<CreateCommunityCommand, Community>()
+            .ConstructUsing(cmd => new Community(cmd.Title, cmd.Description, cmd.CreatorId));
+        CreateMap<Community, CommunityDto>();
+    }
+}
