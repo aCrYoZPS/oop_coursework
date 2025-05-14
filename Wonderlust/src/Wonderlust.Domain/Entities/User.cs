@@ -15,7 +15,7 @@ public class User
 
     private User() { }
 
-    public User(string username, string password, string email)
+    public User(string username, string passwordHash, string email)
     {
         Id = Guid.NewGuid();
         if (string.IsNullOrWhiteSpace(username))
@@ -23,9 +23,9 @@ public class User
             throw new ArgumentException("Username cannot be empty.", nameof(username));
         }
 
-        if (string.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(passwordHash))
         {
-            throw new ArgumentException("Password cannot be empty.", nameof(password));
+            throw new ArgumentException("Password hash cannot be empty.", nameof(passwordHash));
         }
 
         if (!Utils.IsValidEmail(email))
@@ -34,7 +34,7 @@ public class User
         }
 
         Username = username;
-        PasswordHash = password;
+        PasswordHash = passwordHash;
         Email = email.ToLower();
         RegistrationDate = DateTimeOffset.UtcNow;
     }
@@ -42,6 +42,16 @@ public class User
     public void UpdateKarma(int change)
     {
         Karma += change;
+    }
+
+    public void UpdateUsername(string newUsername)
+    {
+        if (string.IsNullOrEmpty(newUsername))
+        {
+            throw new ArgumentException("New username cannot be empty", nameof(newUsername));
+        }
+
+        Username = newUsername;
     }
 
     public void ChangePassword(string newPasswordHash)

@@ -43,7 +43,14 @@ public class MongoUserRepository : IUserRepository
 
     public async Task UpdateAsync(User user)
     {
-        await collection.ReplaceOneAsync(u => u.Id == user.Id, user);
+        try
+        {
+            await collection.ReplaceOneAsync(u => u.Id == user.Id, user);
+        }
+        catch (MongoWriteException ex)
+        {
+            throw new Exception($"Failed to update user with id: {user.Id}. {ex.Message}");
+        }
     }
 
     public async Task DeleteAsync(Guid id)

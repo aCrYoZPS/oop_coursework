@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Wonderlust.Application.Exceptions;
 using Wonderlust.Application.Features.Users.Dtos;
 using Wonderlust.Domain.Entities;
 using Wonderlust.Domain.Repositories;
@@ -15,7 +16,7 @@ public class CreateUserCommandHandler(IUserRepository repository, IMapper mapper
 
         if (existingUser != null)
         {
-            throw new Exception($"User with email {request.Email} already exists");
+            throw new AlreadyExistsException($"User with email {request.Email} already exists");
         }
 
         var user = mapper.Map<User>(request);
