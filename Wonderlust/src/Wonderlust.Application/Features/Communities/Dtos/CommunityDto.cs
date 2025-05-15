@@ -2,7 +2,7 @@
 
 public record CommunityDto(
     Guid Id,
-    string Title,
+    string Name,
     string Description,
     DateTimeOffset CreationDate
 );

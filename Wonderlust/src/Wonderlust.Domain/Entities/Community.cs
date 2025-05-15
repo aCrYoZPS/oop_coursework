@@ -30,4 +30,19 @@ public class Community
         CreatorId = creatorId;
         CreationDate = DateTimeOffset.UtcNow;
     }
+
+    public void UpdateName(string newName)
+    {
+        if (string.IsNullOrEmpty(newName))
+        {
+            throw new ArgumentException("Community name cannot be empty.", nameof(newName));
+        }
+
+        Name = newName;
+    }
+
+    public void UpdateDescription(string newDescription)
+    {
+        Description = newDescription;
+    }
 }

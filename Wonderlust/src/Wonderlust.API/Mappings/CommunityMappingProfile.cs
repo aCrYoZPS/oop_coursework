@@ -12,7 +12,7 @@ public class CommunityMappingProfile : Profile
     {
         CreateMap<CreateCommunityRequest, CreateCommunityCommand>();
         CreateMap<CreateCommunityCommand, Community>()
-            .ConstructUsing(cmd => new Community(cmd.Title, cmd.Description, cmd.CreatorId));
+            .ConstructUsing(cmd => new Community(cmd.Name, cmd.Description, cmd.CreatorId));
         CreateMap<Community, CommunityDto>();
     }
 }

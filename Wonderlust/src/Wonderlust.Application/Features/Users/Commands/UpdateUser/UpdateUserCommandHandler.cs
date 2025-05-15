@@ -15,31 +15,31 @@ public class UpdateUserCommandHandler(IUserRepository userRepository, IMapper ma
         var existingUser = await userRepository.GetByIdAsync(request.UserId);
         var changed = false;
 
-        if (existingUser == null)
-        {
-            throw new NotFoundException($"User with id {request.UserId} not found");
-        }
-
-        if (request.Username != null)
-        {
-            existingUser.UpdateUsername(request.Username);
-            changed = true;
-        }
-
-        if (request.Password != null)
-        {
-            existingUser.ChangePassword(PasswordManager.HashPassword(request.Password));
-            changed = true;
-        }
-
-        if (request.Email != null)
-        {
-            existingUser.UpdateEmail(request.Email);
-            changed = true;
-        }
-
         try
         {
+            if (existingUser == null)
+            {
+                throw new NotFoundException($"User with id {request.UserId} not found");
+            }
+
+            if (request.Username != null)
+            {
+                existingUser.UpdateUsername(request.Username);
+                changed = true;
+            }
+
+            if (request.Password != null)
+            {
+                existingUser.ChangePassword(PasswordManager.HashPassword(request.Password));
+                changed = true;
+            }
+
+            if (request.Email != null)
+            {
+                existingUser.UpdateEmail(request.Email);
+                changed = true;
+            }
+
             if (changed)
             {
                 await userRepository.UpdateAsync(existingUser);

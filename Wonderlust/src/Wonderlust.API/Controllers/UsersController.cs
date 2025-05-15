@@ -99,7 +99,10 @@ public class UsersController(IMediator mediator, IMapper mapper, IConfiguration 
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return Problem(
+                statusCode: StatusCodes.Status500InternalServerError,
+                detail: ex.Message
+            );
         }
     }
 
