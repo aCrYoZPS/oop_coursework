@@ -20,4 +20,9 @@
       <ProjectReference Include="..\Wonderlust.Domain\Wonderlust.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Subscriptions\Commands\Unsubscribe\" />
+      <Folder Include="Features\Subscriptions\Commands\UpdateNotificationStatus\" />
+    </ItemGroup>
+
 </Project>

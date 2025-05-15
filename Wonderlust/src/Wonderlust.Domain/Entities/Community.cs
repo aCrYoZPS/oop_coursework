@@ -11,10 +11,6 @@ public class Community
     public Guid CreatorId { get; private set; }
     public User Creator { get; private set; }
 
-    public virtual ICollection<Subscription> Subscriptions { get; private set; } = new List<Subscription>();
-
-    public virtual ICollection<Moderator> Moderators { get; private set; } = new List<Moderator>();
-
     private Community() { }
 
     public Community(string name, string description, Guid creatorId)

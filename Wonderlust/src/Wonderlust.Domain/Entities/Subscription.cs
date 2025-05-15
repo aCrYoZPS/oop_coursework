@@ -5,7 +5,7 @@ public class Subscription
     public Guid Id { get; private set; }
 
     public DateTimeOffset SubscriptionDate { get; private set; }
-    public bool EnableNotifications { get; private set; } = true;
+    public bool EnableNotifications { get; set; } = true;
 
     public Guid UserId { get; private set; }
     public User User { get; private set; }

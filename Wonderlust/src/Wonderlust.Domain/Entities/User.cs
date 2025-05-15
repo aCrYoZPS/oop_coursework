@@ -10,9 +10,6 @@ public class User
     public DateTimeOffset RegistrationDate { get; private set; }
     public int Karma { get; private set; } = 0;
 
-    public virtual ICollection<Subscription> Subscriptions { get; private set; } = new List<Subscription>();
-    public virtual ICollection<Moderator> ModeratedCommunities { get; private set; } = new List<Moderator>();
-
     private User() { }
 
     public User(string username, string passwordHash, string email)

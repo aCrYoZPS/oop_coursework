@@ -1,12 +1,9 @@
-﻿using Xunit;
-using Moq;
+﻿using Moq;
 using MediatR;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using System;
-using System.Threading.Tasks;
 using Wonderlust.API.Controllers;
 using Wonderlust.API.Requests.Communities;
 using Wonderlust.Application.Exceptions;

@@ -11,4 +11,5 @@ public interface ISubscriptionRepository
     public Task AddAsync(Subscription subscription);
     public Task UpdateAsync(Subscription subscription);
     public Task DeleteAsync(Guid id);
+    public Task<Subscription?> GetByUserAndCommunityAsync(Guid userId, Guid communityId);
 }

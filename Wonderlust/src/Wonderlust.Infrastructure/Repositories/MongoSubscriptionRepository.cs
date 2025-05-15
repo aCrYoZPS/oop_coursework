@@ -42,4 +42,10 @@ public class MongoSubscriptionRepository(IMongoDatabase database) : ISubscriptio
     {
         await collection.DeleteOneAsync(s => s.Id == id);
     }
+
+    public async Task<Subscription?> GetByUserAndCommunityAsync(Guid userId, Guid communityId)
+    {
+        return await collection.Find(s => s.UserId == userId && s.CommunityId == communityId)
+            .FirstOrDefaultAsync();
+    }
 }
