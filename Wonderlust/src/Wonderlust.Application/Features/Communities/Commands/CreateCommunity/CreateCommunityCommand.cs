@@ -3,8 +3,10 @@ using Wonderlust.Application.Features.Communities.Dtos;
 
 namespace Wonderlust.Application.Features.Communities.Commands.CreateCommunity;
 
-public record CreateCommunityCommand(
-    string Title,
-    string Description,
-    Guid CreatorId
-) : IRequest<CommunityDto>;
+public class CreateCommunityCommand(
+) : IRequest<CommunityDto>
+{
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public Guid CreatorId { get; set; }
+}

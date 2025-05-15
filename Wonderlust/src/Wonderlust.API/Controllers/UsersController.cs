@@ -56,10 +56,10 @@ public class UsersController(IMediator mediator, IMapper mapper, IConfiguration 
         }
 
         var query = new GetUserQuery(id);
-        UserDto result;
         try
         {
-            result = await mediator.Send(query);
+            var result = await mediator.Send(query);
+            return Ok(result);
         }
         catch (NotFoundException ex)
         {
@@ -72,8 +72,6 @@ public class UsersController(IMediator mediator, IMapper mapper, IConfiguration 
                 statusCode: StatusCodes.Status500InternalServerError
             );
         }
-
-        return Ok(result);
     }
 
     [HttpPut("{id:guid}")]
