@@ -21,5 +21,6 @@ public class Subscription
         UserId = userId;
         CommunityId = communityId;
         EnableNotifications = enableNotifications;
+        SubscriptionDate = DateTimeOffset.UtcNow;
     }
 }
