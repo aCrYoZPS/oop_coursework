@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Wonderlust.Application.Exceptions;
 using Wonderlust.Application.Features.Subscriptions.Commands.Subscribe;
 using Wonderlust.Application.Features.Subscriptions.Commands.Unsubscribe;
+using Wonderlust.Application.Features.Subscriptions.Queries.GetSubscribers;
+using Wonderlust.Application.Features.Subscriptions.Queries.GetSubscriptions;
 
 namespace Wonderlust.API.Controllers;
 
@@ -13,7 +15,7 @@ namespace Wonderlust.API.Controllers;
 [Route("subscriptions")]
 public class SubscriptionController(IMediator mediator) : ControllerBase
 {
-    [HttpPost("{communityId:guid}/subscribe")]
+    [HttpPost("community/{communityId:guid}/subscribe")]
     public async Task<IActionResult> Subscribe(Guid communityId)
     {
         var userId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
@@ -36,7 +38,7 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
         }
     }
 
-    [HttpDelete("{communityId:guid}/unsubscribe")]
+    [HttpDelete("community/{communityId:guid}/unsubscribe")]
     public async Task<IActionResult> Unsubscribe(Guid communityId)
     {
         var userId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
@@ -59,15 +61,47 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
         }
     }
 
-    [HttpGet("community/{communityId:guid}/all")]
+    [HttpGet("community/{communityId:guid}")]
     public async Task<IActionResult> GetAllSubscribers(Guid communityId)
     {
-
+        var query = new GetSubscribersQuery(communityId);
+        try
+        {
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status500InternalServerError,
+                detail: ex.Message
+            );
+        }
     }
 
-    [HttpGet("user/{userId:guid}/all")]
+    [HttpGet("user/{userId:guid}")]
     public async Task<IActionResult> GetAllSubscriptions(Guid userId)
     {
-
+        var query = new GetSubscriptionsQuery(userId);
+        try
+        {
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status500InternalServerError,
+                detail: ex.Message
+            );
+        }
     }
 }

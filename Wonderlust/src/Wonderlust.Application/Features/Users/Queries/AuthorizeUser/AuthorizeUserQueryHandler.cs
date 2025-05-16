@@ -18,7 +18,7 @@ public class AuthorizeUserQueryHandler(IUserRepository userRepository, IConfigur
         }
 
         return PasswordManager.VerifyPassword(request.Password, existingUser.PasswordHash)
-            ? new TokenManager(configuration).GenerateJWTToken(existingUser.Id, existingUser.Email)
+            ? new TokenManager(configuration).GenerateJwtToken(existingUser.Id, existingUser.Email)
             : null;
     }
 }

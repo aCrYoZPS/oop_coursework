@@ -19,33 +19,8 @@ namespace Wonderlust.API.Controllers;
 [ApiController]
 [Authorize]
 [Route("users")]
-public class UsersController(IMediator mediator, IMapper mapper, IConfiguration configuration) : ControllerBase
+public class UserController(IMediator mediator, IMapper mapper) : ControllerBase
 {
-    [HttpPost]
-    [AllowAnonymous]
-    public async Task<IActionResult> CreateUser(
-        [FromBody] CreateUserRequest request)
-    {
-        var command = mapper.Map<CreateUserCommand>(request);
-        try
-        {
-            var result = await mediator.Send(command);
-            var response = new CreateUserResponse(result,
-                new TokenManager(configuration).GenerateJWTToken(result.Id, result.Email));
-            return CreatedAtAction(nameof(GetUser), new { id = result.Id }, response);
-        }
-        catch (AlreadyExistsException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return Problem(
-                detail: ex.Message,
-                statusCode: StatusCodes.Status500InternalServerError
-            );
-        }
-    }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetUser(Guid id)

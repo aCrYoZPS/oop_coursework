@@ -2,8 +2,7 @@
 
 namespace Wonderlust.Domain.Repositories;
 
-public interface ICommentNotificationRepository
-{
+public interface ICommentNotificationRepository {
     public Task<IEnumerable<CommentNotification>> GetAllAsync();
     public Task<IEnumerable<CommentNotification>> GetByUserAsync(Guid id);
     public Task<CommentNotification?> GetByIdAsync(Guid id);

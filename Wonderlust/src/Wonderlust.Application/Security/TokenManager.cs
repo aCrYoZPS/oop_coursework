@@ -9,7 +9,7 @@ namespace Wonderlust.Application.Security;
 
 public class TokenManager(IConfiguration configuration)
 {
-    public string GenerateJWTToken(Guid userId, string email)
+    public string GenerateJwtToken(Guid userId, string email)
     {
         var claims = new[]
         {

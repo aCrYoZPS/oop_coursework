@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Wonderlust.API.Controllers;
 using Xunit;
 using Moq;
@@ -15,13 +16,15 @@ public class AuthControllerTests
 {
     private readonly Mock<IMediator> mockMediator;
     private readonly Mock<IMapper> mockMapper;
+    private readonly Mock<IConfiguration> mockConfiguration;
     private readonly AuthController controller;
 
     public AuthControllerTests()
     {
         mockMediator = new Mock<IMediator>();
         mockMapper = new Mock<IMapper>();
-        controller = new AuthController(mockMediator.Object, mockMapper.Object);
+        mockConfiguration = new Mock<IConfiguration>();
+        controller = new AuthController(mockMediator.Object, mockMapper.Object, mockConfiguration.Object);
     }
 
     [Fact]
