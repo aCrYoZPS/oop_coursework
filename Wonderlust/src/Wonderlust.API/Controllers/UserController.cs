@@ -18,11 +18,10 @@ namespace Wonderlust.API.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("users")]
+[Route("users/{id:guid}")]
 public class UserController(IMediator mediator, IMapper mapper) : ControllerBase
 {
-
-    [HttpGet("{id:guid}")]
+    [HttpGet("")]
     public async Task<IActionResult> GetUser(Guid id)
     {
         if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != id.ToString())
@@ -49,7 +48,7 @@ public class UserController(IMediator mediator, IMapper mapper) : ControllerBase
         }
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request)
     {
         if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != id.ToString())
@@ -81,7 +80,7 @@ public class UserController(IMediator mediator, IMapper mapper) : ControllerBase
         }
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
         var command = new DeleteUserCommand(id);

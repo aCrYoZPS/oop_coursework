@@ -9,7 +9,6 @@ public class Community
     public DateTimeOffset CreationDate { get; private set; }
 
     public Guid CreatorId { get; private set; }
-    public User Creator { get; private set; }
 
     private Community() { }
 

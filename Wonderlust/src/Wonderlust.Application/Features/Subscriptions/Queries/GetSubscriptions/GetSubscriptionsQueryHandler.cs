@@ -24,11 +24,11 @@ public class GetSubscriptionsQueryHandler(
 
         var subscriptions = await subscriptionRepository.GetAllByUserAsync(existingUser.Id);
 
-        var userTasks = subscriptions
+        var communityTasks = subscriptions
             .Select(subscription => communityRepository.GetByIdAsync(subscription.CommunityId))
             .ToList();
-        var users = await Task.WhenAll(userTasks);
-        var subscribers = users.Select(mapper.Map<CommunityDto>).ToList();
+        var communities = await Task.WhenAll(communityTasks);
+        var subscribers = communities.Select(mapper.Map<CommunityDto>).ToList();
 
         return subscribers.Where(subscriber => subscriber != null);
     }

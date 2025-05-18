@@ -23,6 +23,11 @@ public class MongoModeratorRepository(IMongoDatabase database) : IModeratorRepos
         return await collection.Find(m => m.Id == id).FirstOrDefaultAsync();
     }
 
+    public async Task<Moderator?> GetByUserAndCommunityAsync(Guid userId, Guid communityId)
+    {
+        return await collection.Find(m => m.UserId == userId && m.CommunityId == communityId).FirstOrDefaultAsync();
+    }
+
     public async Task AddAsync(Moderator moderator)
     {
         await collection.InsertOneAsync(moderator);
