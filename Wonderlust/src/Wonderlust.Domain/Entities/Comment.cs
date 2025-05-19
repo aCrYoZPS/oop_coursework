@@ -9,15 +9,10 @@ public class Comment
     public DateTimeOffset LastUpdateDate { get; private set; }
 
     public Guid AuthorId { get; private set; }
-    public User Author { get; private set; }
 
     public Guid PostId { get; private set; }
-    public Post Post { get; private set; }
 
     public Guid ParentCommentId { get; private set; }
-    public Comment ParentComment { get; private set; }
-
-    public ICollection<CommentReaction> Reactions { get; private set; } = new List<CommentReaction>();
 
     private Comment() { }
 

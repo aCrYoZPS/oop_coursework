@@ -8,6 +8,7 @@ using Wonderlust.Application.Exceptions;
 using Wonderlust.Application.Features.Communities.Commands.CreateCommunity;
 using Wonderlust.Application.Features.Communities.Commands.DeleteCommunity;
 using Wonderlust.Application.Features.Communities.Commands.UpdateCommunity;
+using Wonderlust.Application.Features.Communities.Queries.GetAllCommunities;
 using Wonderlust.Application.Features.Communities.Queries.GetCommunity;
 
 namespace Wonderlust.API.Controllers;
@@ -25,6 +26,24 @@ public class CommunityController(IMediator mediator, IMapper mapper) : Controlle
 
         var result = await mediator.Send(command);
         return CreatedAtAction(nameof(GetCommunity), new { id = result.Id }, result);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCommunities()
+    {
+        var query = new GetAllCommunitiesQuery();
+        try
+        {
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status500InternalServerError,
+                detail: ex.Message
+            );
+        }
     }
 
     [HttpGet("{id:guid}")]
