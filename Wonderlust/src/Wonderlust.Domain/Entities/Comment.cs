@@ -7,6 +7,7 @@ public class Comment
     public string Content { get; private set; }
     public DateTimeOffset CreationDate { get; private set; }
     public DateTimeOffset LastUpdateDate { get; private set; }
+    public bool Deleted { get; private set; } = false;
 
     public Guid AuthorId { get; private set; }
 
@@ -15,6 +16,11 @@ public class Comment
     public Guid ParentCommentId { get; private set; }
 
     private Comment() { }
+
+    public void SetDeleted()
+    {
+        Deleted = true;
+    }
 
     public Comment(string content, Guid authorId, Guid postId, Guid parentCommentId)
     {

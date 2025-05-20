@@ -6,7 +6,6 @@ using Wonderlust.Domain.Repositories;
 
 namespace Wonderlust.Application.Features.Comments.Queries.GetAllComments;
 
-
 public class GetAllCommentsQueryHandler(
     IMapper mapper,
     IPostRepository postRepository,
@@ -23,6 +22,6 @@ public class GetAllCommentsQueryHandler(
         }
 
         var comments = await commentRepository.GetAllByPostAsync(existingPost.Id);
-        return comments.Select(mapper.Map<CommentDto>).Where(comment => comment != null);
+        return comments.Select(mapper.Map<CommentDto>);
     }
 }
