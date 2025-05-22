@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using Wonderlust.Application.Exceptions;
 using Wonderlust.Application.Features.Comments.Dtos;

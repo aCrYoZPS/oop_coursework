@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using Wonderlust.Domain.Entities;
+using AutoMapper;
 using Wonderlust.API.Requests.Comments;
 using Wonderlust.Application.Features.Comments.Commands.CreateComment;
 using Wonderlust.Application.Features.Comments.Commands.UpdateComment;
 using Wonderlust.Application.Features.Comments.Dtos;
+using Wonderlust.Domain.Entities;
 
 namespace Wonderlust.API.Mappings;
 
