@@ -10,7 +10,7 @@ public class GetCommentQueryHandler(IMapper mapper, ICommentRepository commentRe
 {
     public async Task<CommentDto> Handle(GetCommentQuery request, CancellationToken cancellationToken)
     {
-        var comment = commentRepository.GetByIdAsync(request.CommentId);
+        var comment = await commentRepository.GetByIdAsync(request.CommentId);
         return mapper.Map<CommentDto>(comment);
     }
 }

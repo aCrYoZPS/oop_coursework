@@ -30,11 +30,14 @@ public class MongoCommentRepository(IMongoDatabase database) : ICommentRepositor
 
     public async Task UpdateAsync(Comment comment)
     {
+        comment.SetLastUpdateDate(DateTimeOffset.UtcNow);
         await collection.ReplaceOneAsync(c => c.Id == comment.Id, comment);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        await collection.DeleteOneAsync(c => c.Id == id);
+        var comment = await collection.Find(c => c.Id == id).FirstOrDefaultAsync();
+        comment.SetDeleted();
+        await UpdateAsync(comment);
     }
 }
