@@ -4,6 +4,10 @@ namespace Wonderlust.API.Requests.Posts;
 
 public record CreatePostRequest(
     [Required] string Title,
-    string? Content,
+    string Content,
     Guid? ImageId
-);
+)
+{
+    public Guid AuthorId { get; set; }
+    public Guid CommunityId { get; set; }
+};

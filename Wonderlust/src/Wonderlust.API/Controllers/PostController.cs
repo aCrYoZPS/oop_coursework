@@ -67,7 +67,16 @@ public class PostController(IMediator mediator, IMapper mapper) : ControllerBase
     {
         var command = mapper.Map<CreatePostCommand>(request);
         command.CommunityId = communityId;
-        command.AuthorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+
+        try
+        {
+            command.AuthorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized();
+        }
+
         try
         {
             var result = await mediator.Send(command);
