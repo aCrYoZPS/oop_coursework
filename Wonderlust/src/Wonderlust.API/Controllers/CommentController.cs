@@ -7,9 +7,9 @@ using Wonderlust.API.Requests.Comments;
 using Wonderlust.Application.Exceptions;
 using Wonderlust.Application.Features.Comments.Commands.CreateComment;
 using Wonderlust.Application.Features.Comments.Commands.DeleteComment;
+using Wonderlust.Application.Features.Comments.Commands.UpdateComment;
 using Wonderlust.Application.Features.Comments.Queries.GetAllComments;
 using Wonderlust.Application.Features.Comments.Queries.GetComment;
-using Wonderlust.Application.Features.Posts.Commands.UpdatePost;
 
 namespace Wonderlust.API.Controllers;
 
@@ -114,7 +114,7 @@ public class CommentController(IMapper mapper, IMediator mediator) : ControllerB
     {
         request.SenderId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         request.CommentId = commentId;
-        var command = mapper.Map<UpdatePostCommand>(request);
+        var command = mapper.Map<UpdateCommentCommand>(request);
         try
         {
             var result = await mediator.Send(command);

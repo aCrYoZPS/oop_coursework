@@ -81,25 +81,26 @@ public class CommentControllerTests
         Assert.Equal(expectedResult, okResult.Value);
     }
 
-    // [Fact]
-    // public async Task PostCommentWithValidRequestReturnsCreatedResult()
-    // {
-    //     var userId = Guid.NewGuid();
-    //     var postId = Guid.NewGuid();
-    //     SetupUserContext(userId);
-    //
-    //     var request = new CreateCommentRequest("Test content", null);
-    //     var command = new CreateCommentCommand(userId, null, postId, "Test content");
-    //     var expectedResult = new CommentDto { Id = Guid.NewGuid() };
-    //
-    //     mockMapper.Setup(m => m.Map<CreateCommentCommand>(request)).Returns(command);
-    //     mockMediator.Setup(m => m.Send(command, CancellationToken.None)).ReturnsAsync(expectedResult);
-    //
-    //     var result = await controller.PostComment(Guid.NewGuid(), postId, request);
-    //
-    //     var createdAtResult = Assert.IsType<CreatedAtActionResult>(result);
-    //     Assert.Equal(expectedResult.Id, ((CommentDto)createdAtResult.Value).Id);
-    // }
+    [Fact]
+    public async Task PostCommentWithValidRequestReturnsCreatedResult()
+    {
+        var userId = Guid.NewGuid();
+        var postId = Guid.NewGuid();
+        SetupUserContext(userId);
+
+        var request = new CreateCommentRequest("Test content", null);
+        var command = new CreateCommentCommand(userId, null, postId, "Test content");
+        var expectedResult = new CommentDto(Id: Guid.NewGuid(), "Test content", userId, Guid.NewGuid(),
+            DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
+
+        mockMapper.Setup(m => m.Map<CreateCommentCommand>(request)).Returns(command);
+        mockMediator.Setup(m => m.Send(command, CancellationToken.None)).ReturnsAsync(expectedResult);
+
+        var result = await controller.PostComment(Guid.NewGuid(), postId, request);
+
+        var createdAtResult = Assert.IsType<CreatedAtActionResult>(result);
+        Assert.Equal(expectedResult.Id, ((CommentDto)createdAtResult.Value).Id);
+    }
 
     [Fact]
     public async Task PostCommentWithInvalidUserReturnsProblem()
