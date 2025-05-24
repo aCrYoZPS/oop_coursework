@@ -147,7 +147,8 @@ public class CommentControllerTests
 
         var request = new UpdateCommentRequest("Updated content");
         var command = new UpdateCommentCommand(commentId, "Updated content", userId);
-        var expectedResult = new CommentDto(commentId, "content", userId, parentCommentId, DateTimeOffset.UtcNow,
+        var expectedResult = new CommentDto(commentId, "Updated content", userId, parentCommentId,
+            DateTimeOffset.UtcNow,
             DateTimeOffset.UtcNow);
 
         mockMapper.Setup(m => m.Map<UpdateCommentCommand>(request)).Returns(command);
