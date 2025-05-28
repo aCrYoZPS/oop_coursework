@@ -1,4 +1,4 @@
-﻿namespace WonderlustFrontend;
+﻿namespace Wonderlust.UI;
 
 public partial class App : Application
 {

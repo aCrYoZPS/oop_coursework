@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace WonderlustFrontend;
+namespace Wonderlust.UI;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

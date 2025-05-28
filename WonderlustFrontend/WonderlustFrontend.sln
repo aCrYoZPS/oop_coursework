@@ -1,6 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WonderlustFrontend", "WonderlustFrontend\WonderlustFrontend.csproj", "{7178CE9A-397B-4B7B-A2E3-57B704243C27}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wonderlust.UI", "Wonderlust.UI\Wonderlust.UI.csproj", "{7178CE9A-397B-4B7B-A2E3-57B704243C27}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7} = {2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wonderlust.UI.Domain", "Wonderlust.UI.Domain\Wonderlust.UI.Domain.csproj", "{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +20,15 @@ Global
 		{7178CE9A-397B-4B7B-A2E3-57B704243C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7178CE9A-397B-4B7B-A2E3-57B704243C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7178CE9A-397B-4B7B-A2E3-57B704243C27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2EEFEB61-4F13-48E7-B5B7-3693E00A0E71}
 	EndGlobalSection
 EndGlobal

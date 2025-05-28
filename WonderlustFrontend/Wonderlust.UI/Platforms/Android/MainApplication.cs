@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace WonderlustFrontend;
+namespace Wonderlust.UI;
 
 [Application]
 public class MainApplication : MauiApplication
