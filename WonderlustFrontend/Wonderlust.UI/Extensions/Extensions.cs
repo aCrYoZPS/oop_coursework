@@ -12,6 +12,7 @@ public static class UiExtensions
         services.AddTransient<Comments>();
         services.AddTransient<CommunityFormPage>();
         services.AddTransient<PostFormPage>();
+        services.AddTransient<CommentFormPage>();
 
         return services;
     }
@@ -24,6 +25,7 @@ public static class UiExtensions
         services.AddTransient<CommentViewModel>();
         services.AddTransient<CommunityFormViewModel>();
         services.AddTransient<PostFormViewModel>();
+        services.AddTransient<CommentFormViewModel>();
 
         return services;
     }

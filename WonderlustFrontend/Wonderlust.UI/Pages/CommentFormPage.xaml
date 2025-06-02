@@ -1,0 +1,30 @@
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="using:Wonderlust.UI.ViewModels"
+    x:Class="Wonderlust.UI.Pages.CommentFormPage"
+    x:DataType="models:CommentFormViewModel"
+    Title="{Binding Action, StringFormat='{0} Comment'}">
+
+    <ContentPage.BindingContext>
+        <models:CommentFormViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="15">
+            <Editor
+                Placeholder="Type your comment here"
+                Text="{Binding Content, FallbackValue=''}"
+                AutoSize="TextChanges" />
+
+            <Button
+                Text="{Binding Action}"
+                Command="{Binding SaveCommand}"
+                IsEnabled="{Binding IsValid}" />
+
+            <Button
+                Text="Cancel"
+                Command="{Binding CancelCommand}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

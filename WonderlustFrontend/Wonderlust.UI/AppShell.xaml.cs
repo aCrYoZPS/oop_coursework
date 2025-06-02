@@ -9,5 +9,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(Pages.Comments), typeof(Pages.Comments));
         Routing.RegisterRoute(nameof(Pages.CommunityFormPage), typeof(Pages.CommunityFormPage));
         Routing.RegisterRoute(nameof(Pages.PostFormPage), typeof(Pages.PostFormPage));
+        Routing.RegisterRoute(nameof(Pages.CommentFormPage), typeof(Pages.CommentFormPage));
     }
 }

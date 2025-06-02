@@ -117,12 +117,11 @@ public partial class CommentPageViewModel : ObservableObject, IQueryAttributable
             return;
         }
 
-        var comment =
-            await commentService.AddCommentAsync(new Comment(CommentContent, sessionManager.CurrentUser.Id, Post.Id,
-                null));
+        var navParams = new Dictionary<string, object>
+        {
+            ["postId"] = Post.Id
+        };
 
-        WeakReferenceMessenger.Default.Send(new CommentAddedMessage(comment));
-
-        CommentContent = null;
+        await Shell.Current.GoToAsync(nameof(Pages.CommentFormPage), navParams);
     }
 }
