@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Wonderlust.UI.ViewModels"
+             x:DataType="models:PostsViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:entities="clr-namespace:Wonderlust.UI.Domain.Entities;assembly=Wonderlust.UI.Domain"
+             x:Class="Wonderlust.UI.Pages.Posts">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding UpdatePostsCommand}" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.BindingContext>
+        <models:PostsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Post" Command="{Binding CreatePostCommand}" />
+        <ToolbarItem Text="Edit Community" IsEnabled="{Binding IsCreator}"
+                     Command="{Binding EditCommunityCommand}" />
+        <ToolbarItem Text="Delete Community" IsEnabled="{Binding IsCreator}"
+                     Command="{Binding DeleteCommunityCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto,*">
+            <Label Grid.Row="0"
+                   Text="{Binding CommunityName}"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Padding="10" />
+
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding Posts}"
+                            Margin="0,10,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:Post">
+                        <Border Margin="8" Padding="12">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Title}" FontAttributes="Bold" />
+                                <Label Text="{Binding Content}" FontSize="14" />
+                            </VerticalStackLayout>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type models:PostsViewModel}}, Path=PostTappedCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

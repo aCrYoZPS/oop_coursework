@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Wonderlust.UI.ViewModels"
+             x:DataType="models:CommentPageViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Wonderlust.UI.Pages.Comments">
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding }" />
+    </ContentPage.Behaviors>
+
+    <ContentPage.BindingContext>
+        <models:CommentPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit Post" IsEnabled="{Binding IsAuthor}"
+                     Command="{Binding EditPostCommand}" />
+        <ToolbarItem Text="Delete Post" IsEnabled="{Binding IsAuthor}"
+                     Command="{Binding DeletePostCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto,*,Auto">
+            <VerticalStackLayout Grid.Row="0">
+                <Label
+                    Text="{Binding PostTitle}"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Padding="10" />
+                <Label
+                    Text="{Binding Content}"
+                    Padding="10" />
+            </VerticalStackLayout>
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding Comments}"
+                            ItemsLayout="VerticalList">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:CommentViewModel">
+
+                        <VerticalStackLayout Spacing="6"
+                                             Padding="8"
+                                             Margin="0,4,0,4">
+
+                            <Border Padding="10">
+                                <FlexLayout Direction="Row">
+                                    <StackLayout FlexLayout.Grow="1">
+                                        <Label Text="{Binding Content}" />
+                                        <Label Text="{Binding CreationDate, StringFormat='{}{0:MMM d, HH:mm}'}"
+                                               FontSize="12" />
+                                    </StackLayout>
+                                    <Button Text="Reply"
+                                            Command="{Binding ReplyCommand}"
+                                            CommandParameter="(your input here…)" />
+                                </FlexLayout>
+                            </Border>
+
+                            <toolkit:Expander IsExpanded="True">
+                                <toolkit:Expander.Header>
+                                    <Label Text="{Binding Replies.Count, StringFormat='Replies ({0})'}"
+                                           FontAttributes="Italic" FontSize="12" />
+                                </toolkit:Expander.Header>
+                                <toolkit:Expander.Content>
+                                    <CollectionView ItemsSource="{Binding Replies}"
+                                                    ItemsLayout="VerticalList"
+                                                    Margin="20,0,0,0"
+                                                    ItemTemplate="{StaticResource CommentTemplate}" />
+                                </toolkit:Expander.Content>
+                            </toolkit:Expander>
+
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button Grid.Row="2" Text="Comment"
+                    Command="{Binding CreateCommentCommand}" />
+        </Grid>
+    </ContentPage.Content>
+    <ContentPage.Resources>
+        <DataTemplate x:Key="CommentTemplate" x:DataType="models:CommentViewModel">
+            <VerticalStackLayout Spacing="6"
+                                 Padding="8"
+                                 Margin="0,4,0,4">
+
+                <Border Padding="10">
+                    <FlexLayout Direction="Row">
+                        <StackLayout FlexLayout.Grow="1">
+                            <Label Text="{Binding Content}" />
+                            <Label Text="{Binding CreationDate, StringFormat='{}{0:MMM d, HH:mm}'}"
+                                   FontSize="12" />
+                        </StackLayout>
+                        <Button Text="Reply"
+                                Command="{Binding ReplyCommand}"
+                                CommandParameter="(your input here…)" />
+                    </FlexLayout>
+                </Border>
+
+                <toolkit:Expander IsExpanded="True">
+                    <toolkit:Expander.Header>
+                        <Label Text="{Binding Replies.Count, StringFormat='Replies ({0})'}"
+                               FontAttributes="Italic" FontSize="12" />
+                    </toolkit:Expander.Header>
+                    <toolkit:Expander.Content>
+                        <CollectionView ItemsSource="{Binding Replies}"
+                                        ItemsLayout="VerticalList"
+                                        Margin="20,0,0,0"
+                                        ItemTemplate="{StaticResource CommentTemplate}" />
+                    </toolkit:Expander.Content>
+                </toolkit:Expander>
+
+            </VerticalStackLayout>
+        </DataTemplate>
+    </ContentPage.Resources>
+</ContentPage>

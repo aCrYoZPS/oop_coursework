@@ -8,7 +8,8 @@ namespace Wonderlust.Application.Features.Communities.Queries.GetAllCommunities;
 public class GetAllCommunitiesQueryHandler(IMapper mapper, ICommunityRepository communityRepository)
     : IRequestHandler<GetAllCommunitiesQuery, IEnumerable<CommunityDto>>
 {
-    public async Task<IEnumerable<CommunityDto>> Handle(GetAllCommunitiesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CommunityDto>> Handle(GetAllCommunitiesQuery request,
+        CancellationToken cancellationToken)
     {
         var communities = await communityRepository.GetAllAsync();
         var communityDtos = communities.Select(mapper.Map<CommunityDto>).ToList();

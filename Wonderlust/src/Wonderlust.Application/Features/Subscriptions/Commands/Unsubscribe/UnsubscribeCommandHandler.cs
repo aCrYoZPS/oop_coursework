@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using Wonderlust.Domain.Repositories;
 using Wonderlust.Application.Exceptions;
@@ -6,10 +5,10 @@ using Wonderlust.Application.Exceptions;
 namespace Wonderlust.Application.Features.Subscriptions.Commands.Unsubscribe;
 
 public class UnsubscribeCommandHandler(
-        ISubscriptionRepository subscriptionRepository,
-        ICommunityRepository communityRepository,
-        IUserRepository userRepository
-    ) : IRequestHandler<UnsubscribeCommand>
+    ISubscriptionRepository subscriptionRepository,
+    ICommunityRepository communityRepository,
+    IUserRepository userRepository
+) : IRequestHandler<UnsubscribeCommand>
 {
     public async Task Handle(UnsubscribeCommand request, CancellationToken cancellationToken)
     {
@@ -25,6 +24,7 @@ public class UnsubscribeCommandHandler(
         {
             throw new NotFoundException($"Community with id {request.CommunityId} not found.");
         }
+
         var subscription = await subscriptionRepository
             .GetByUserAndCommunityAsync(request.UserId, request.CommunityId);
 

@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wonderlust.UI", "Wonderlust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wonderlust.UI.Domain", "Wonderlust.UI.Domain\Wonderlust.UI.Domain.csproj", "{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wonderlust.UI.Application", "Wonderlust.UI.Application\Wonderlust.UI.Application.csproj", "{09F0D003-6AB0-4ADD-A0F4-6CE9600C580B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B5F21FF-0737-4D7B-8015-67CF1A88CEF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09F0D003-6AB0-4ADD-A0F4-6CE9600C580B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09F0D003-6AB0-4ADD-A0F4-6CE9600C580B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09F0D003-6AB0-4ADD-A0F4-6CE9600C580B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09F0D003-6AB0-4ADD-A0F4-6CE9600C580B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

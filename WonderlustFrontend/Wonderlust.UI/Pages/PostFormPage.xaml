@@ -1,0 +1,34 @@
+﻿<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="using:Wonderlust.UI.ViewModels"
+    x:Class="Wonderlust.UI.Pages.PostFormPage"
+    x:DataType="models:PostFormViewModel"
+    Title="{Binding Action, StringFormat='{0} Post'}">
+
+    <ContentPage.BindingContext>
+        <models:PostFormViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="15">
+            <Entry
+                Placeholder="Post title"
+                Text="{Binding Title, FallbackValue=''}" />
+
+            <Editor
+                Placeholder="Content"
+                Text="{Binding Content, FallbackValue=''}"
+                AutoSize="TextChanges" />
+
+            <Button
+                Text="{Binding Action}"
+                Command="{Binding SaveCommand}"
+                IsEnabled="{Binding IsValid}" />
+
+            <Button
+                Text="Cancel"
+                Command="{Binding CancelCommand}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

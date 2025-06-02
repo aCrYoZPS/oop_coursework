@@ -7,8 +7,6 @@ using Wonderlust.Infrastructure.Repositories;
 using Scrutor;
 using Wonderlust.API.Mappings;
 using Wonderlust.Application.Features.Users.Commands.CreateUser;
-using Wonderlust.Domain.Entities;
-using Wonderlust.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

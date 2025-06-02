@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="Wonderlust.UI.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Wonderlust.UI"
-    Shell.FlyoutBehavior="Flyout"
+    xmlns:pages="clr-namespace:Wonderlust.UI.Pages"
+    FlyoutBehavior="Flyout"
     Title="WonderlustUI">
-
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+        Title="Wonderlust"
+        ContentTemplate="{DataTemplate pages:Communities}"
+        Route="Communities" />
 </Shell>
