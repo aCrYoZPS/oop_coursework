@@ -16,6 +16,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding SubscriptionButtonText }" Command="{Binding ChangeSubscriptionStatusCommand}" />
         <ToolbarItem Text="Post" Command="{Binding CreatePostCommand}" />
         <ToolbarItem Text="Edit Community" IsEnabled="{Binding IsCreator}"
                      Command="{Binding EditCommunityCommand}" />

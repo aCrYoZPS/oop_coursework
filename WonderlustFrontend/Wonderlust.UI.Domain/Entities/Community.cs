@@ -13,8 +13,14 @@ public class Community
 
     public Community() { }
 
+    public Community(Guid id, string name, string description, Guid creatorId) : this(name, description, creatorId)
+    {
+        Id = id;
+    }
+
     public Community(string name, string description, Guid creatorId)
     {
+        Id = Guid.NewGuid();
         Name = name;
         Description = description;
         CreationDate = DateTimeOffset.UtcNow;

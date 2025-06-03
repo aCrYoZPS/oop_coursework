@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Wonderlust.UI.Application.Services.Communities;
 using Wonderlust.UI.Application.Services.Posts;
+using Wonderlust.UI.Application.Services.Subscriptions;
 using Wonderlust.UI.Application.SessionManager;
 using Wonderlust.UI.Domain.Entities;
 using Wonderlust.UI.Messages.Communities;
@@ -15,6 +16,7 @@ public partial class PostsViewModel : ObservableObject, IQueryAttributable
 {
     private readonly IPostService postService;
     private readonly ICommunityService communityService;
+    private readonly ISubscriptionService subscriptionService;
     private readonly SessionManager sessionManager;
 
     public PostsViewModel() { }
@@ -27,14 +29,19 @@ public partial class PostsViewModel : ObservableObject, IQueryAttributable
             Community = comm;
             CommunityName = comm.Name;
             IsCreator = comm.CreatorId == sessionManager.CurrentUser.Id;
+            IsSubscribed = subscriptionService.IsSubscribed(comm.Id, sessionManager.CurrentUser.Id).GetAwaiter()
+                .GetResult();
+
             _ = UpdatePosts();
         }
     }
 
-    public PostsViewModel(IPostService postService, SessionManager sessionManager, ICommunityService communityService)
+    public PostsViewModel(IPostService postService, SessionManager sessionManager, ICommunityService communityService,
+        ISubscriptionService subscriptionService)
     {
         this.postService = postService;
         this.communityService = communityService;
+        this.subscriptionService = subscriptionService;
         this.sessionManager = sessionManager;
         _ = UpdatePosts();
 
@@ -68,6 +75,10 @@ public partial class PostsViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty] private Community? community;
     [ObservableProperty] private string communityName;
     [ObservableProperty] private bool isCreator;
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(SubscriptionButtonText))]
+    private bool isSubscribed;
+
+    public string SubscriptionButtonText => IsSubscribed ? "Unsubscribe" : "Subscribe";
 
     [RelayCommand]
     private async Task UpdatePosts() => await GetPosts();
@@ -86,6 +97,19 @@ public partial class PostsViewModel : ObservableObject, IQueryAttributable
                     }
                 }
             );
+        }
+    }
+
+    [RelayCommand]
+    private async Task ChangeSubscriptionStatusAsync()
+    {
+        if (IsSubscribed)
+        {
+            await subscriptionService.UnsubscribeAsync(community.Id, sessionManager.CurrentUser.Id);
+        }
+        else
+        {
+            await subscriptionService.SubscribeAsync(community.Id, sessionManager.CurrentUser.Id);
         }
     }
 

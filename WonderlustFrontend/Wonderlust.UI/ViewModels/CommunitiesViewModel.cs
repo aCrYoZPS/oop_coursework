@@ -41,6 +41,9 @@ public partial class CommunitiesViewModel : ObservableObject
                     Communities[index] = message.Value;
                 }
             });
+
+        WeakReferenceMessenger.Default.Register<SubscriptionMessage>(this,
+            (r, message) => { _ = UpdateCommunities(); });
     }
 
     public ObservableCollection<Community> Communities { get; set; } = [];

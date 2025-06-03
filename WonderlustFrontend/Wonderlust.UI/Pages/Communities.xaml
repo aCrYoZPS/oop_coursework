@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Wonderlust.UI.ViewModels"
+             xmlns:converters="clr-namespace:Wonderlust.UI.Converters"
              x:DataType="models:CommunitiesViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:entities="clr-namespace:Wonderlust.UI.Domain.Entities;assembly=Wonderlust.UI.Domain"
@@ -10,7 +11,9 @@
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding UpdateCommunitiesCommand}" />
     </ContentPage.Behaviors>
-
+    <ContentPage.Resources>
+        <converters:SubscribedToBrushConverter x:Key="SubBrush" />
+    </ContentPage.Resources>
     <ContentPage.BindingContext>
         <models:CommunitiesViewModel />
     </ContentPage.BindingContext>
@@ -26,7 +29,7 @@
                             SelectedItem="{Binding SelectedCommunity, Mode=TwoWay}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="entities:Community">
-                        <Border Margin="8" Padding="12">
+                        <Border Stroke="{Binding ., Converter={StaticResource SubBrush}}" Margin="8" Padding="12">
                             <StackLayout>
                                 <Label Text="{Binding Name}" FontAttributes="Bold" />
                                 <Label Text="{Binding Description}" FontSize="14" />

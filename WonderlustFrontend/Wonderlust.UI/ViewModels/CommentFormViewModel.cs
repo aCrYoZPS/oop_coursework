@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Wonderlust.UI.Application.Services.Comments;
-using Wonderlust.UI.Application.Services.Communities;
 using Wonderlust.UI.Application.SessionManager;
 using Wonderlust.UI.Domain.Entities;
 using Wonderlust.UI.Messages.Comments;
@@ -24,6 +23,8 @@ public partial class CommentFormViewModel : ObservableObject, IQueryAttributable
 
     [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsValid))]
     private string content = string.Empty;
+
+    [ObservableProperty] private string replyingToContent = string.Empty;
 
     [ObservableProperty] private string action = "Create";
 
@@ -55,25 +56,37 @@ public partial class CommentFormViewModel : ObservableObject, IQueryAttributable
         {
             parentCommentId = parentCommentIdAttr;
         }
+
+        if (query.TryGetValue("replyingToContent", out var replToContent) &&
+            replToContent is string replyingToContentAttr)
+        {
+            ReplyingToContent = replyingToContentAttr;
+        }
     }
 
     [RelayCommand(CanExecute = nameof(IsValid))]
     async Task SaveAsync()
     {
-        if (comment == null || sessionManager.CurrentUser == null)
+        if (sessionManager.CurrentUser == null)
         {
             return;
         }
 
         if (IsEditing)
         {
+            if (comment == null)
+            {
+                return;
+            }
+
             comment.Content = Content;
             var updated = await commentService.UpdateCommentAsync(comment);
             WeakReferenceMessenger.Default.Send(new CommentEditedMessage(updated));
         }
         else
         {
-            comment = new Comment(Content, sessionManager.CurrentUser.Id, postId.Value, parentCommentId);
+            comment = new Comment(Guid.NewGuid(), Content, sessionManager.CurrentUser.Id, postId.Value,
+                parentCommentId);
             var created = await commentService.AddCommentAsync(comment);
             WeakReferenceMessenger.Default.Send(new CommentAddedMessage(created));
         }

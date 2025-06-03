@@ -12,6 +12,7 @@
 
     <ContentPage.Content>
         <StackLayout Padding="20" Spacing="15">
+            <Label Text="{Binding ReplyingToContent}" />
             <Editor
                 Placeholder="Type your comment here"
                 Text="{Binding Content, FallbackValue=''}"

@@ -46,6 +46,14 @@
                                              Margin="0,4,0,4">
 
                             <Border Padding="10">
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Edit Comment" IsEnabled="{Binding IsAuthor}"
+                                                        Command="{Binding EditCommentCommand}" />
+                                        <MenuFlyoutItem Text="Delete Comment" IsEnabled="{Binding IsAuthor}"
+                                                        Command="{Binding DeleteCommentCommand}" />
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
                                 <FlexLayout Direction="Row">
                                     <StackLayout FlexLayout.Grow="1">
                                         <Label Text="{Binding Content}" />
@@ -86,6 +94,14 @@
                                  Margin="0,4,0,4">
 
                 <Border Padding="10">
+                    <FlyoutBase.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Edit Comment" IsEnabled="{Binding IsAuthor}"
+                                            Command="{Binding EditCommentCommand}" />
+                            <MenuFlyoutItem Text="Delete Comment" IsEnabled="{Binding IsAuthor}"
+                                            Command="{Binding DeleteCommentCommand}" />
+                        </MenuFlyout>
+                    </FlyoutBase.ContextFlyout>
                     <FlexLayout Direction="Row">
                         <StackLayout FlexLayout.Grow="1">
                             <Label Text="{Binding Content}" />

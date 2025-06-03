@@ -7,10 +7,10 @@ public class CommunityService(HttpClient httpClient) : ICommunityService
     {
         return
         [
-            new Community()
-            {
-                Name = "COMMUNITY", Description = "DESC", CreationDate = DateTimeOffset.UtcNow, SubscriberCount = 0
-            }
+            new Community(Guid.Parse("874325f5-3994-4c5f-a81e-4f9a836b689a"), "community", "DESC",
+                Guid.Parse("a98e1225-3916-4c79-9775-7d9a737c5027")),
+            new Community("Other com", "No desc ahahahahahhahah",
+                Guid.Parse("a98e1225-3916-5c79-9775-7d9a737c5027")),
         ];
     }
 

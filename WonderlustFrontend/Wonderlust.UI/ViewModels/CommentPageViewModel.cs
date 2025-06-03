@@ -38,6 +38,9 @@ public partial class CommentPageViewModel : ObservableObject, IQueryAttributable
         this.postService = postService;
         this.sessionManager = sessionManager;
         _ = UpdateComments();
+        WeakReferenceMessenger.Default.Register<CommentAddedMessage>(this, (r, message) => _ = UpdateComments());
+        WeakReferenceMessenger.Default.Register<CommentDeletedMessage>(this, (r, message) => _ = UpdateComments());
+        WeakReferenceMessenger.Default.Register<CommentEditedMessage>(this, (r, message) => _ = UpdateComments());
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -50,9 +53,6 @@ public partial class CommentPageViewModel : ObservableObject, IQueryAttributable
             Content = postAttr.Content;
             IsAuthor = postAttr.AuthorId == sessionManager.CurrentUser?.Id;
             _ = UpdateComments();
-
-            WeakReferenceMessenger.Default.Register<CommentAddedMessage>(this,
-                (r, message) => { _ = UpdateComments(); });
         }
     }
 
@@ -119,9 +119,14 @@ public partial class CommentPageViewModel : ObservableObject, IQueryAttributable
 
         var navParams = new Dictionary<string, object>
         {
-            ["postId"] = Post.Id
+            ["postId"] = Post.Id, ["replyingToContent"] = Post.Content ?? ""
         };
 
         await Shell.Current.GoToAsync(nameof(Pages.CommentFormPage), navParams);
+    }
+
+    void HandleOption(string option)
+    {
+        Console.WriteLine($"Selected: {option}");
     }
 }
