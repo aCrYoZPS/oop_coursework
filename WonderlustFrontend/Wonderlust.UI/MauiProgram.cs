@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using Wonderlust.UI.Application.Services.Comments;
 using Wonderlust.UI.Application.Services.Communities;
@@ -31,17 +32,18 @@ public static class MauiProgram
             .AddSingleton<SessionManager>();
 
         builder.Services.AddHttpClient<IPostService, PostService>(opt =>
-            opt.BaseAddress = new Uri("http://localhost:5097/posts")
+            opt.BaseAddress = new Uri("http://localhost:5097/")
         );
         builder.Services.AddHttpClient<ICommunityService, CommunityService>(opt =>
-            opt.BaseAddress = new Uri("http://localhost:5097/communities")
+            opt.BaseAddress = new Uri("http://localhost:5097/")
         );
         builder.Services.AddHttpClient<ICommentService, CommentService>(opt =>
-            opt.BaseAddress = new Uri("http://localhost:5097/comments")
+            opt.BaseAddress = new Uri("http://localhost:5097/")
         );
         builder.Services.AddHttpClient<ISubscriptionService, SubscriptionService>(opt =>
-            opt.BaseAddress = new Uri("http://localhost:5097/subscriptions")
+            opt.BaseAddress = new Uri("http://localhost:5097/")
         );
+        builder.Services.AddHttpClient<SessionManager>(opt => opt.BaseAddress = new Uri("http://localhost:5097"));
 
 
 #if DEBUG

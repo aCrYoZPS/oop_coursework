@@ -19,7 +19,7 @@ namespace Wonderlust.API.Controllers;
 public class CommunityController(IMediator mediator, IMapper mapper) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateCommuntity([FromBody] CreateCommunityRequest request)
+    public async Task<IActionResult> CreateCommunity([FromBody] CreateCommunityRequest request)
     {
         var command = mapper.Map<CreateCommunityCommand>(request);
         command.CreatorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);

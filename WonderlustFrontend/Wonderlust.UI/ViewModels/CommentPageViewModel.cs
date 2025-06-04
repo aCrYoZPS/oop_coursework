@@ -63,13 +63,13 @@ public partial class CommentPageViewModel : ObservableObject, IQueryAttributable
     {
         if (Post != null)
         {
-            var comments = await commentService.GetComments(Post.Id);
+            var comments = await commentService.GetComments(Post.CommunityId, Post.Id);
             await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     Comments.Clear();
                     foreach (var comment in comments)
                     {
-                        Comments.Add(new CommentViewModel(comment, commentService, sessionManager));
+                        Comments.Add(new CommentViewModel(comment, commentService, sessionManager, Post));
                     }
                 }
             );
@@ -104,7 +104,7 @@ public partial class CommentPageViewModel : ObservableObject, IQueryAttributable
             return;
         }
 
-        await postService.DeletePostAsync(Post.Id);
+        await postService.DeletePostAsync(Post.Id, Post.CommunityId);
         WeakReferenceMessenger.Default.Send(new PostDeletedMessage(Post.Id));
         await Shell.Current.GoToAsync("..");
     }
@@ -119,7 +119,8 @@ public partial class CommentPageViewModel : ObservableObject, IQueryAttributable
 
         var navParams = new Dictionary<string, object>
         {
-            ["postId"] = Post.Id, ["replyingToContent"] = Post.Content ?? ""
+            ["postId"] = Post.Id, ["replyingToContent"] = Post.Content ?? "",
+            ["communityId"] = Post.CommunityId
         };
 
         await Shell.Current.GoToAsync(nameof(Pages.CommentFormPage), navParams);

@@ -13,20 +13,22 @@ public partial class CommentViewModel : ObservableObject
 {
     private readonly ICommentService commentService;
     private readonly SessionManager sessionManager;
+    private Post post;
 
-    public CommentViewModel(Comment comment, ICommentService commentService, SessionManager sessionManager)
+    public CommentViewModel(Comment comment, ICommentService commentService, SessionManager sessionManager, Post post)
     {
         this.commentService = commentService;
         this.sessionManager = sessionManager;
+        this.post = post;
         Comment = comment;
         Replies = new ObservableCollection<CommentViewModel>(
             comment.Replies
-                .Select(c => new CommentViewModel(c, commentService, sessionManager)));
+                .Select(c => new CommentViewModel(c, commentService, sessionManager, post)));
     }
 
     public Comment Comment { get; }
     public string Content => Comment.Content;
-    public DateTimeOffset CreationDate => Comment.CreationDate;
+    public DateTimeOffset LastUpdateDate => Comment.LastUpdateDate.ToLocalTime();
 
     public bool IsAuthor => sessionManager.CurrentUser?.Id == Comment.AuthorId;
 
@@ -37,7 +39,8 @@ public partial class CommentViewModel : ObservableObject
     {
         var navParams = new Dictionary<string, object>
         {
-            ["postId"] = Comment.PostId, ["parentCommentId"] = Comment.Id, ["replyingToContent"] = Comment.Content
+            ["postId"] = Comment.PostId, ["parentCommentId"] = Comment.Id, ["replyingToContent"] = Comment.Content,
+            ["communityId"] = post.CommunityId,
         };
 
         await Shell.Current.GoToAsync(nameof(Pages.CommentFormPage), navParams);
@@ -51,7 +54,8 @@ public partial class CommentViewModel : ObservableObject
             ["comment"] = Comment,
             ["postId"] = Comment.PostId,
             ["parentCommentId"] = Comment.Id,
-            ["replyingToContent"] = Comment.Content
+            ["replyingToContent"] = Comment.Content,
+            ["communityId"] = post.CommunityId,
         };
 
         await Shell.Current.GoToAsync(nameof(Pages.CommentFormPage), navParams);
@@ -73,7 +77,7 @@ public partial class CommentViewModel : ObservableObject
             return;
         }
 
-        await commentService.DeleteCommentAsync(Comment.Id);
+        await commentService.DeleteCommentAsync(post.CommunityId, post.Id, Comment.Id);
         WeakReferenceMessenger.Default.Send(new CommentDeletedMessage(Comment.Id));
     }
 }

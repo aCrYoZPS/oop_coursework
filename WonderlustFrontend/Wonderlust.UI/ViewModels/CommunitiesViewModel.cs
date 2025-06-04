@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Wonderlust.UI.Application.Services.Communities;
+using Wonderlust.UI.Application.Services.Subscriptions;
 using Wonderlust.UI.Domain.Entities;
 using Wonderlust.UI.Messages.Communities;
 
@@ -11,13 +12,16 @@ namespace Wonderlust.UI.ViewModels;
 public partial class CommunitiesViewModel : ObservableObject
 {
     private readonly ICommunityService communityService;
+    private readonly ISubscriptionService subscriptionService;
 
     public CommunitiesViewModel() { }
 
-    public CommunitiesViewModel(ICommunityService communityService)
+    public CommunitiesViewModel(ICommunityService communityService, ISubscriptionService subscriptionService)
     {
         this.communityService = communityService;
+        this.subscriptionService = subscriptionService;
         _ = UpdateCommunities();
+
         WeakReferenceMessenger.Default.Register<CommunityAddedMessage>(
             this,
             (r, message) => { Communities.Insert(0, message.Value); });
@@ -87,6 +91,12 @@ public partial class CommunitiesViewModel : ObservableObject
     private async Task GetCommunities()
     {
         var communities = await communityService.GetCommunities();
+        foreach (var community in communities)
+        {
+            var subs = await subscriptionService.GetCommunitySubscriptionsAsync(community.Id);
+            community.SubscriberCount = subs.Count(sub => sub.CommunityId == community.Id);
+        }
+
         await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 Communities.Clear();

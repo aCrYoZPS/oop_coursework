@@ -106,11 +106,15 @@ public partial class PostsViewModel : ObservableObject, IQueryAttributable
         if (IsSubscribed)
         {
             await subscriptionService.UnsubscribeAsync(community.Id, sessionManager.CurrentUser.Id);
+            IsSubscribed = false;
         }
         else
         {
             await subscriptionService.SubscribeAsync(community.Id, sessionManager.CurrentUser.Id);
+            IsSubscribed = true;
         }
+
+        WeakReferenceMessenger.Default.Send(new SubscriptionMessage(new Subscription()));
     }
 
     [RelayCommand]

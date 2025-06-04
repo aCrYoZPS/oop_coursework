@@ -1,31 +1,64 @@
-using Wonderlust.UI.Application.Services.Communities;
+using System.Net.Http.Headers;
+using System.Text;
+using Wonderlust.UI.Application.SessionManager;
 using Wonderlust.UI.Domain.Entities;
+using SerializerLib.Json;
+using Wonderlust.UI.Application.Services.Communities.Requests;
 
-public class CommunityService(HttpClient httpClient) : ICommunityService
+namespace Wonderlust.UI.Application.Services.Communities;
+
+public class CommunityService(HttpClient httpClient, SessionManager.SessionManager sessionManager) : ICommunityService
 {
     public async Task<IEnumerable<Community>> GetCommunities()
     {
-        return
-        [
-            new Community(Guid.Parse("874325f5-3994-4c5f-a81e-4f9a836b689a"), "community", "DESC",
-                Guid.Parse("a98e1225-3916-4c79-9775-7d9a737c5027")),
-            new Community("Other com", "No desc ahahahahahhahah",
-                Guid.Parse("a98e1225-3916-5c79-9775-7d9a737c5027")),
-        ];
-    }
-
-    public async Task<Community> UpdateCommunityAsync(Community community)
-    {
-        return community;
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await httpClient.GetAsync("communities");
+        var communities =
+            JsonSerializer.Deserialize<List<Community>>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+        return communities ?? [];
     }
 
     public async Task<Community> AddCommunityAsync(Community community)
     {
-        return community;
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var content = new StringContent
+        (
+            JsonSerializer.Serialize(new AddCommunityRequest(community.Name, community.Description)),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await httpClient.PostAsync("communities", content);
+
+        return JsonSerializer.Deserialize<Community>(await response.Content.ReadAsStringAsync())!;
+    }
+
+    public async Task<Community> UpdateCommunityAsync(Community community)
+    {
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var content = new StringContent
+        (
+            JsonSerializer.Serialize(new AddCommunityRequest(community.Name, community.Description)),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await httpClient.PutAsync($"communities/{community.Id}", content);
+        response.EnsureSuccessStatusCode();
+
+        return JsonSerializer.Deserialize<Community>(await response.Content.ReadAsStringAsync())!;
     }
 
     public async Task DeleteCommunityAsync(Guid communityId)
     {
-        return;
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await httpClient.DeleteAsync($"communities/{communityId}");
+        response.EnsureSuccessStatusCode();
     }
 }

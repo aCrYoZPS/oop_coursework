@@ -41,6 +41,7 @@
                         <Border Margin="8" Padding="12">
                             <VerticalStackLayout Spacing="4">
                                 <Label Text="{Binding Title}" FontAttributes="Bold" />
+                                <Label Text="{Binding AuthorName, StringFormat='By {0}'}" />
                                 <Label Text="{Binding Content}" FontSize="14" />
                             </VerticalStackLayout>
                             <Border.GestureRecognizers>

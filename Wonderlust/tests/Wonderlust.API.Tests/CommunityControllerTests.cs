@@ -47,7 +47,7 @@ public class CommunityControllerTests
         mockMapper.Setup(m => m.Map<CreateCommunityCommand>(request)).Returns(command);
         mockMediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(expectedResult);
 
-        var result = await controller.CreateCommuntity(request);
+        var result = await controller.CreateCommunity(request);
 
         var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(nameof(CommunityController.GetCommunity), createdAtActionResult.ActionName);

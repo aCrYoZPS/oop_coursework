@@ -2,6 +2,8 @@ namespace Wonderlust.UI.Domain.Entities;
 
 public class Comment
 {
+    public Comment() { }
+
     public Comment(Guid id, string content, Guid authorId, Guid postId, Guid? parentCommentId)
     {
         Id = id;

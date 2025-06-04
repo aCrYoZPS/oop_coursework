@@ -71,7 +71,10 @@ public partial class PostFormViewModel : ObservableObject, IQueryAttributable
         }
         else
         {
-            post = new Post(Title, Content, communityId.Value, sessionManager.CurrentUser.Id);
+            post = new Post(Title, Content, communityId.Value, sessionManager.CurrentUser.Id)
+            {
+                AuthorName = sessionManager.CurrentUser.Username
+            };
             var created = await postService.AddPostAsync(post);
             WeakReferenceMessenger.Default.Send(new PostAddedMessage(created));
         }

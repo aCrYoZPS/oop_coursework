@@ -3,12 +3,12 @@
 namespace Wonderlust.API.Requests.Comments;
 
 public class CreateCommentRequest(
-    [Required] string Content,
-    Guid? ParentPostId
+    [Required] string content,
+    Guid? parentCommentId
 )
 {
     public Guid PostId { get; set; }
-    public string Content { get; init; } = Content;
-    public Guid? ParentPostId { get; init; } = ParentPostId;
+    public string Content { get; init; } = content;
+    public Guid? ParentCommentId { get; init; } = parentCommentId;
     public Guid AuthorId { get; set; }
 }

@@ -4,5 +4,6 @@ public record CommunityDto(
     Guid Id,
     string Name,
     string Description,
-    DateTimeOffset CreationDate
+    DateTimeOffset CreationDate,
+    Guid CreatorId
 );

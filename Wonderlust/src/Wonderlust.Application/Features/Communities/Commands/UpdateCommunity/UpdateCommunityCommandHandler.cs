@@ -22,31 +22,31 @@ public class UpdateCommunityCommandHandler(
         }
 
         var moderators = await moderatorRepository.GetByCommunityAsync(request.CommunityId);
-        if (existingCommunity.CreatorId != request.SenderId ||
-            moderators.FirstOrDefault(m => m.Id == request.SenderId) == null)
+        if (existingCommunity.CreatorId == request.SenderId ||
+            moderators.FirstOrDefault(m => m.Id == request.SenderId) != null)
         {
-            throw new UnauthorizedAccessException(
-                $"The user with id {request.SenderId} is not authorized to delete the community with id {request.CommunityId}"
-            );
+            if (request.Name != null)
+            {
+                existingCommunity.UpdateName(request.Name);
+                updated = true;
+            }
+
+            if (request.Description != null)
+            {
+                existingCommunity.UpdateDescription(request.Description);
+                updated = true;
+            }
+
+            if (updated)
+            {
+                await communityRepository.UpdateAsync(existingCommunity);
+            }
+
+            return mapper.Map<CommunityDto>(existingCommunity);
         }
 
-        if (request.Name != null)
-        {
-            existingCommunity.UpdateName(request.Name);
-            updated = true;
-        }
-
-        if (request.Description != null)
-        {
-            existingCommunity.UpdateDescription(request.Description);
-            updated = true;
-        }
-
-        if (updated)
-        {
-            await communityRepository.UpdateAsync(existingCommunity);
-        }
-
-        return mapper.Map<CommunityDto>(existingCommunity);
+        throw new UnauthorizedAccessException(
+            $"The user with id {request.SenderId} is not authorized to delete the community with id {request.CommunityId}"
+        );
     }
 }

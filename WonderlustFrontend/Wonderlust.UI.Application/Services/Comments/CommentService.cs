@@ -1,8 +1,12 @@
+using System.Net.Http.Headers;
+using System.Text;
+using SerializerLib.Json;
+using Wonderlust.UI.Application.Services.Comments.Requests;
 using Wonderlust.UI.Domain.Entities;
 
 namespace Wonderlust.UI.Application.Services.Comments;
 
-public class CommentService(HttpClient client) : ICommentService
+public class CommentService(HttpClient httpClient, SessionManager.SessionManager sessionManager) : ICommentService
 {
     private static List<Comment> comments =
     [
@@ -25,9 +29,25 @@ public class CommentService(HttpClient client) : ICommentService
         },
     ];
 
-    public async Task<IEnumerable<Comment>> GetComments(Guid postId)
+    public async Task<IEnumerable<Comment>> GetComments(Guid communityId, Guid postId)
     {
-        return comments;
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = httpClient.GetAsync($"{communityId}/{postId}/comments").GetAwaiter().GetResult();
+        comments =
+            JsonSerializer.Deserialize<List<Comment>>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult()) ??
+            [];
+
+        foreach (var comment in comments.ToArray())
+        {
+            if (comment.ParentCommentId != null)
+            {
+                comments.First(c => c.Id == comment.ParentCommentId).Replies.Add(comment);
+                comments.Remove(comment);
+            }
+        }
+
+        return comments ?? [];
     }
 
     private void FlattenList(List<Comment> list, List<Comment> flattened)
@@ -42,8 +62,20 @@ public class CommentService(HttpClient client) : ICommentService
         }
     }
 
-    public async Task<Comment> AddCommentAsync(Comment comment)
+    public async Task<Comment> AddCommentAsync(Guid communityId, Comment comment)
     {
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var content = new StringContent
+        (
+            System.Text.Json.JsonSerializer.Serialize(new AddCommentRequest(comment.Content, comment.ParentCommentId)),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await httpClient.PostAsync($"{communityId}/{comment.PostId}/comments", content);
+        response.EnsureSuccessStatusCode();
+
         if (comment.ParentCommentId == null)
         {
             comments.Insert(0, comment);
@@ -61,8 +93,20 @@ public class CommentService(HttpClient client) : ICommentService
     }
 
 
-    public async Task<Comment> UpdateCommentAsync(Comment comment)
+    public async Task<Comment> UpdateCommentAsync(Guid communityId, Comment comment)
     {
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var content = new StringContent
+        (
+            JsonSerializer.Serialize(new UpdateCommentRequest(comment.Content)),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await httpClient.PutAsync($"{communityId}/{comment.PostId}/comments/{comment.Id}", content);
+        response.EnsureSuccessStatusCode();
+
         var flattenedComments = new List<Comment>();
         FlattenList(comments, flattenedComments);
         var index = -1;
@@ -82,8 +126,13 @@ public class CommentService(HttpClient client) : ICommentService
         return comment;
     }
 
-    public async Task DeleteCommentAsync(Guid commentId)
+    public async Task DeleteCommentAsync(Guid communityId, Guid postId, Guid commentId)
     {
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await httpClient.DeleteAsync($"{communityId}/{postId}/comments/{commentId}");
+        response.EnsureSuccessStatusCode();
+
         var flattenedComments = new List<Comment>();
         FlattenList(comments, flattenedComments);
 

@@ -3,8 +3,9 @@ namespace Wonderlust.Application.Features.Comments.Dtos;
 public record CommentDto(
     Guid Id,
     string Content,
-    Guid AuhorId,
-    Guid ParrentCommentId,
+    Guid AuthorId,
+    Guid? ParentCommentId,
+    Guid PostId,
     DateTimeOffset CreationDate,
     DateTimeOffset LastUpdateDate
 );

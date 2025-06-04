@@ -14,6 +14,7 @@ public partial class CommentFormViewModel : ObservableObject, IQueryAttributable
     private readonly SessionManager sessionManager;
     private Guid? postId;
     private Guid? parentCommentId;
+    private Guid? communityId;
 
     public CommentFormViewModel(ICommentService commentService, SessionManager sessionManager)
     {
@@ -62,6 +63,11 @@ public partial class CommentFormViewModel : ObservableObject, IQueryAttributable
         {
             ReplyingToContent = replyingToContentAttr;
         }
+
+        if (query.TryGetValue("communityId", out var communityIdValue) && communityIdValue is Guid communityIdAttr)
+        {
+            communityId = communityIdAttr;
+        }
     }
 
     [RelayCommand(CanExecute = nameof(IsValid))]
@@ -80,14 +86,14 @@ public partial class CommentFormViewModel : ObservableObject, IQueryAttributable
             }
 
             comment.Content = Content;
-            var updated = await commentService.UpdateCommentAsync(comment);
+            var updated = await commentService.UpdateCommentAsync(communityId.Value, comment);
             WeakReferenceMessenger.Default.Send(new CommentEditedMessage(updated));
         }
         else
         {
             comment = new Comment(Guid.NewGuid(), Content, sessionManager.CurrentUser.Id, postId.Value,
                 parentCommentId);
-            var created = await commentService.AddCommentAsync(comment);
+            var created = await commentService.AddCommentAsync(communityId.Value, comment);
             WeakReferenceMessenger.Default.Send(new CommentAddedMessage(created));
         }
 

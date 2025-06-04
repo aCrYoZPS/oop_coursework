@@ -36,7 +36,7 @@ public class MongoPostRepository(IMongoDatabase database) : IPostRepository
     public async Task UpdateAsync(Post post)
     {
         post.UpdateLastUpdateDate(DateTimeOffset.UtcNow);
-        await collection.InsertOneAsync(post);
+        await collection.ReplaceOneAsync(p => p.Id == post.Id, post);
     }
 
     public async Task DeleteAsync(Guid id)

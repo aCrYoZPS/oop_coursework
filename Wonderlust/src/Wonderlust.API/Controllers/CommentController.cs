@@ -65,7 +65,7 @@ public class CommentController(IMapper mapper, IMediator mediator) : ControllerB
         try
         {
             var result = await mediator.Send(command);
-            return CreatedAtAction(nameof(GetComment), new { id = result.Id }, result);
+            return Ok(result);
         }
         catch (ArgumentException ex)
         {

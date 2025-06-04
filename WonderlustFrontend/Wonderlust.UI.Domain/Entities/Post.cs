@@ -8,9 +8,11 @@ public class Post
     public string? Content { get; set; }
     public DateTimeOffset CreationDate { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset LastUpdateDate { get; set; } = DateTimeOffset.UtcNow;
+    public string AuthorName { get; set; }
+    public Guid? ImageId { get; set; }
     public int LikeCount { get; set; } = 0;
 
-    public Guid CommunityId { get; private set; }
+    public Guid CommunityId { get; set; }
 
     public Guid AuthorId { get; private set; }
 

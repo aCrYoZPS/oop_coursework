@@ -1,57 +1,62 @@
+using System.Net.Http.Headers;
+using System.Text;
+using SerializerLib.Json;
+using Wonderlust.UI.Application.Services.Posts.Requests;
 using Wonderlust.UI.Domain.Entities;
 
 namespace Wonderlust.UI.Application.Services.Posts;
 
-public class PostService(HttpClient httpClient) : IPostService
+public class PostService(HttpClient httpClient, SessionManager.SessionManager sessionManager) : IPostService
 {
-    private static readonly List<Post> posts =
-    [
-        new Post
-        {
-            Title = "FIRST", Content = "firstcontent", CreationDate = DateTimeOffset.UtcNow,
-            LastUpdateDate = DateTimeOffset.UtcNow
-        },
-        new Post
-        {
-            Title = "SECOND", Content = "secondcontent", CreationDate = DateTimeOffset.UtcNow,
-            LastUpdateDate = DateTimeOffset.UtcNow
-        },
-        new Post
-        {
-            Title = "THIRD", Content = "thirdcontent", CreationDate = DateTimeOffset.UtcNow,
-            LastUpdateDate = DateTimeOffset.UtcNow
-        },
-    ];
-
     public async Task<IEnumerable<Post>> GetPosts(Guid communityId)
     {
-        return posts;
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await httpClient.GetAsync($"{communityId}/posts");
+        var responseBody = await response.Content.ReadAsStringAsync();
+        var posts = JsonSerializer.Deserialize<List<Post>>(responseBody);
+        return posts ?? [];
     }
 
     public async Task<Post> AddPostAsync(Post post)
     {
-        posts.Insert(0, post);
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var content = new StringContent
+        (
+            JsonSerializer.Serialize(new AddPostRequest(post.Title, post.Content)),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await httpClient.PostAsync($"{post.CommunityId}/posts", content);
+
         return post;
     }
 
     public async Task<Post> UpdatePostAsync(Post post)
     {
-        var existing = posts.FirstOrDefault(p => p.Id == post.Id);
-        if (existing != null)
-        {
-            var index = posts.IndexOf(existing);
-            posts[index] = post;
-        }
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        return post;
+        var content = new StringContent
+        (
+            JsonSerializer.Serialize(new AddPostRequest(post.Title, post.Content)),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await httpClient.PutAsync($"{post.CommunityId}/posts/{post.Id}", content);
+        var responseBody = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<Post>(responseBody);
     }
 
-    public async Task DeletePostAsync(Guid postId)
+    public async Task DeletePostAsync(Guid postId, Guid communityId)
     {
-        var existing = posts.FirstOrDefault(p => p.Id == postId);
-        if (existing != null)
-        {
-            posts.Remove(existing);
-        }
+        var token = await sessionManager.GetToken();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await httpClient.DeleteAsync($"{communityId}/posts/{postId}");
+        response.EnsureSuccessStatusCode();
     }
 }

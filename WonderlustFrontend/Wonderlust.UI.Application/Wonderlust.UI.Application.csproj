@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Wonderlust.UI.Domain\Wonderlust.UI.Domain.csproj" />
+        <ProjectReference Include="..\Wonderlust.UI.Domain\Wonderlust.UI.Domain.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="aCrYoZSerializerLib" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

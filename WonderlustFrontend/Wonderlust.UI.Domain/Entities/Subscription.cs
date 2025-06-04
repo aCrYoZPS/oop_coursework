@@ -9,7 +9,7 @@ public class Subscription
 
     public Subscription() { }
 
-    public Subscription(Guid userId, Guid communityId)
+    public Subscription(Guid communityId, Guid userId)
     {
         Id = Guid.NewGuid();
         UserId = userId;

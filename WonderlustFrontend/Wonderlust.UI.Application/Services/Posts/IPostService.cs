@@ -7,5 +7,5 @@ public interface IPostService
     Task<IEnumerable<Post>> GetPosts(Guid communityId);
     Task<Post> AddPostAsync(Post post);
     Task<Post> UpdatePostAsync(Post post);
-    Task DeletePostAsync(Guid postId);
+    Task DeletePostAsync(Guid postId, Guid communityId);
 }

@@ -4,7 +4,10 @@ using Wonderlust.Domain.Repositories;
 
 namespace Wonderlust.Application.Features.Communities.Commands.DeleteCommunity;
 
-public class DeleteCommunityCommandHandler(ICommunityRepository communityRepository, IUserRepository userRepository)
+public class DeleteCommunityCommandHandler(
+    ICommunityRepository communityRepository,
+    IUserRepository userRepository,
+    ISubscriptionRepository subscriptionRepository)
     : IRequestHandler<DeleteCommunityCommand>
 {
     public async Task Handle(DeleteCommunityCommand request, CancellationToken cancellationToken)
@@ -24,5 +27,6 @@ public class DeleteCommunityCommandHandler(ICommunityRepository communityReposit
         }
 
         await communityRepository.DeleteAsync(existingCommunity.Id);
+        await subscriptionRepository.DeleteByCommunityAsync(existingCommunity.Id);
     }
 }
