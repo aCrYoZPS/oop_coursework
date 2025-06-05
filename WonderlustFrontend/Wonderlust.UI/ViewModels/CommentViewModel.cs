@@ -31,10 +31,11 @@ public partial class CommentViewModel : ObservableObject
     public DateTimeOffset LastUpdateDate => Comment.LastUpdateDate.ToLocalTime();
 
     public bool IsAuthor => sessionManager.CurrentUser?.Id == Comment.AuthorId;
+    public bool IsValid => !Comment.Deleted;
 
     public ObservableCollection<CommentViewModel> Replies { get; }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsValid))]
     private async Task ReplyAsync(string replyText)
     {
         var navParams = new Dictionary<string, object>
@@ -46,7 +47,7 @@ public partial class CommentViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(Pages.CommentFormPage), navParams);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsValid))]
     private async Task EditCommentAsync()
     {
         var navParams = new Dictionary<string, object>
@@ -61,7 +62,7 @@ public partial class CommentViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(Pages.CommentFormPage), navParams);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsValid))]
     private async Task DeleteCommentAsync()
     {
         if (Comment == null)
@@ -79,5 +80,6 @@ public partial class CommentViewModel : ObservableObject
 
         await commentService.DeleteCommentAsync(post.CommunityId, post.Id, Comment.Id);
         WeakReferenceMessenger.Default.Send(new CommentDeletedMessage(Comment.Id));
+        Comment.Deleted = true;
     }
 }

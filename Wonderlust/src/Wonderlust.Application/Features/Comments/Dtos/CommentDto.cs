@@ -7,5 +7,6 @@ public record CommentDto(
     Guid? ParentCommentId,
     Guid PostId,
     DateTimeOffset CreationDate,
-    DateTimeOffset LastUpdateDate
+    DateTimeOffset LastUpdateDate,
+    bool Deleted
 );
